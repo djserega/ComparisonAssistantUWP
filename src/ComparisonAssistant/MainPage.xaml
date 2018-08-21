@@ -5,7 +5,7 @@
     xmlns:local="using:ComparisonAssistant"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:tool="using:MyToolkit.Controls"
+    xmlns:toolControls="using:MyToolkit.Controls"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
@@ -43,12 +43,12 @@
         </StackPanel>
 
         <Grid Grid.Column="3" Grid.Row="1">
-            <tool:DataGrid>
-                <tool:DataGrid.Columns>
-                    <tool:DataGridTextColumn Header="Статус"/>
-                    <tool:DataGridTextColumn Header="Полное имя"/>
-                </tool:DataGrid.Columns>
-            </tool:DataGrid>
+            <toolControls:DataGrid>
+                <toolControls:DataGrid.Columns>
+                    <toolControls:DataGridTextColumn Header="Статус"/>
+                    <toolControls:DataGridTextColumn Header="Полное имя"/>
+                </toolControls:DataGrid.Columns>
+            </toolControls:DataGrid>
         </Grid>
 
         <Grid Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="3">
