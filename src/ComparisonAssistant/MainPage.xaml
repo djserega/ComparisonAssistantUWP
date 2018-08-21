@@ -1,0 +1,36 @@
+﻿<Page
+    x:Class="ComparisonAssistant.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:ComparisonAssistant"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="auto"/>
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Grid.Column="0">
+            <Border Height="5"/>
+            <ComboBox Header="Пользователь" Width="150"/>
+            <Border Height="5"/>
+            <ComboBox Header="Задача" Width="150"/>
+            <Border Height="5"/>
+            <Button Content="Обновить" VerticalAlignment="Bottom" Width="150"/>
+            <Border Height="5"/>
+            <CalendarDatePicker Header="Изменено" DateFormat="{}{day.integer(2)}-{month.abbreviated}-{year.full}" PlaceholderText="" Width="150"/>
+            <Border Height="5"/>
+            <CalendarDatePicker Header="Обновлено" DateFormat="{}{day.integer(2)}-{month.abbreviated}-{year.full}" PlaceholderText="" Width="150"/>
+            <Border Height="5"/>
+            <CalendarView SelectionMode="Multiple"/>
+        </StackPanel>
+
+        <Grid Grid.Column="1">
+        </Grid>
+        
+    </Grid>
+</Page>
