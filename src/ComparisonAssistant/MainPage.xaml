@@ -24,8 +24,8 @@
             <RowDefinition Height="60"/>
             <RowDefinition Height="5"/>
         </Grid.RowDefinitions>
-        
-        
+
+
         <StackPanel Grid.Column="1" Grid.Row="1">
             <Border Height="5"/>
             <ComboBox Header="Пользователь" Width="300"/>
@@ -52,7 +52,12 @@
         </Grid>
 
         <Grid Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="3">
-            <TextBox Header="Путь к файлу логов" Text="{x:Bind Settings.FullNameFileLogs, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="30"/>
+            </Grid.ColumnDefinitions>
+            <TextBox Grid.Column="0" Header="Путь к файлу логов" Text="{x:Bind Settings.FullNameFileLogs, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <Button Grid.Column="1" VerticalAlignment="Bottom" Content="..." Click="ButtonGetFileNameLog_Click"/>
         </Grid>
 
     </Grid>
