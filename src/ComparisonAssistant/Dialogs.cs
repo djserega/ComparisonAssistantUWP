@@ -19,5 +19,10 @@ namespace ComparisonAssistant
             };
             await contentDialog.ShowAsync();
         }
+
+        internal static async void ShowPopups(string message)
+        {
+            await new Windows.UI.Popups.MessageDialog(message).ShowAsync();
+        }
     }
 }
