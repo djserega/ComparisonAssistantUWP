@@ -5,32 +5,55 @@
     xmlns:local="using:ComparisonAssistant"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:tool="using:MyToolkit.Controls"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="10"/>
+            <ColumnDefinition Width="300"/>
+            <ColumnDefinition Width="10"/>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="10"/>
         </Grid.ColumnDefinitions>
-
-        <StackPanel Grid.Column="0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="5"/>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="5"/>
+        </Grid.RowDefinitions>
+        
+        
+        <StackPanel Grid.Column="1" Grid.Row="1">
             <Border Height="5"/>
-            <ComboBox Header="Пользователь" Width="150"/>
+            <ComboBox Header="Пользователь" Width="300"/>
             <Border Height="5"/>
-            <ComboBox Header="Задача" Width="150"/>
+            <ComboBox Header="Задача" Width="300"/>
             <Border Height="5"/>
-            <Button Content="Обновить" VerticalAlignment="Bottom" Width="150"/>
+            <Button Content="Обновить" VerticalAlignment="Bottom" Width="300"/>
             <Border Height="5"/>
-            <CalendarDatePicker Header="Изменено" DateFormat="{}{day.integer(2)}-{month.abbreviated}-{year.full}" PlaceholderText="" Width="150"/>
+            <CalendarDatePicker Header="Изменено" DateFormat="{}{day.integer(2)}-{month.abbreviated}-{year.full}" PlaceholderText="" Width="300"/>
             <Border Height="5"/>
-            <CalendarDatePicker Header="Обновлено" DateFormat="{}{day.integer(2)}-{month.abbreviated}-{year.full}" PlaceholderText="" Width="150"/>
+            <CalendarDatePicker Header="Обновлено" DateFormat="{}{day.integer(2)}-{month.abbreviated}-{year.full}" PlaceholderText="" Width="300"/>
             <Border Height="5"/>
-            <CalendarView SelectionMode="Multiple"/>
+            <TextBlock Text="Отбор по периоду"/>
+            <CalendarView Width="300" SelectionMode="Multiple" FirstDayOfWeek="Monday" RequestedTheme="Default"/>
         </StackPanel>
 
-        <Grid Grid.Column="1">
+        <Grid Grid.Column="3" Grid.Row="1">
+            <tool:DataGrid>
+                <tool:DataGrid.Columns>
+                    <tool:DataGridTextColumn Header="Статус"/>
+                    <tool:DataGridTextColumn Header="Полное имя"/>
+                </tool:DataGrid.Columns>
+            </tool:DataGrid>
         </Grid>
-        
+
+        <Grid Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="3">
+            <TextBox Header="Путь к файлу логов"/>
+        </Grid>
+
     </Grid>
 </Page>
