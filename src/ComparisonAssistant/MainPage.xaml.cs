@@ -26,6 +26,7 @@ namespace ComparisonAssistant
     public sealed partial class MainPage : Page
     {
         internal Settings Settings { get; set; } = new Settings();
+        internal List<Models.Commit> Commits { get; set; } = new List<Models.Commit>();
 
         public MainPage()
         {
@@ -37,10 +38,10 @@ namespace ComparisonAssistant
             base.OnNavigatedTo(e);
         }
 
-        private void ButtonUpdateDB_Click(object sender, RoutedEventArgs e)
+        private async void ButtonUpdateDB_Click(object sender, RoutedEventArgs e)
         {
             ReaderFileLog readerLog = new ReaderFileLog() { FileName = Settings.FullNameFileLogs };
-            readerLog.ReadFileAsync();
+            Commits = await readerLog.ReadFileAsync();
         }
 
         private async void ButtonGetFileNameLog_Click(object sender, RoutedEventArgs e)
