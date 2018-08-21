@@ -22,9 +22,21 @@ namespace ComparisonAssistant
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        internal Settings Settings { get; set; } = new Settings();
+
         public MainPage()
         {
-            this.InitializeComponent();
+            InitializeComponent();
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+        }
+
+        private void ButtonUpdateDB_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

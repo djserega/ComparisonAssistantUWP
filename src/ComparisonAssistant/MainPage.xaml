@@ -32,7 +32,7 @@
             <Border Height="5"/>
             <ComboBox Header="Задача" Width="300"/>
             <Border Height="5"/>
-            <Button Content="Обновить" VerticalAlignment="Bottom" Width="300"/>
+            <Button Content="Обновить" VerticalAlignment="Bottom" Width="300" Click="ButtonUpdateDB_Click"/>
             <Border Height="5"/>
             <CalendarDatePicker Header="Изменено" DateFormat="{}{day.integer(2)}-{month.abbreviated}-{year.full}" PlaceholderText="" Width="300"/>
             <Border Height="5"/>
@@ -52,7 +52,7 @@
         </Grid>
 
         <Grid Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="3">
-            <TextBox Header="Путь к файлу логов"/>
+            <TextBox Header="Путь к файлу логов" Text="{x:Bind Settings.FullNameFileLogs, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
         </Grid>
 
     </Grid>
