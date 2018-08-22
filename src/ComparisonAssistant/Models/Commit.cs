@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ComparisonAssistant.Models
 {
-    public class Commit
+    public class Commit : NotifyPropertyChangedClass
     {
         public Commit(string userName, string comment, DateTime date, string task)
         {
