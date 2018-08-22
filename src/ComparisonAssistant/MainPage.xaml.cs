@@ -26,48 +26,56 @@ namespace ComparisonAssistant
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        private List<Models.Commit> _allCommits = new List<Models.Commit>();
-        private List<Models.Commit> _userCommits = new List<Models.Commit>();
-        private List<string> _users = new List<string>();
-        private List<string> _userTasks = new List<string>();
         private IEnumerable<IGrouping<string, Models.Commit>> _groupedCommitByUser;
 
         internal Settings Settings { get; set; } = new Settings();
-        public List<Models.Commit> AllCommits { get => _allCommits; }
-        public List<Models.Commit> Commits { get => _userCommits; }
-        public List<string> Users { get => _users; }
-        public List<string> UserTasks { get => _userTasks; }
+        public List<Models.Commit> AllCommits { get; } = new List<Models.Commit>();
+        public ObservableCollection<Models.Commit> Commits { get; } = new ObservableCollection<Models.Commit>();
+        public List<string> Users { get; } = new List<string>();
+        public List<string> UserTasks { get; } = new List<string>();
 
         public string SelectedUser { get; set; }
+        public string SelectedTask { get; set; }
 
         public MainPage()
         {
             InitializeComponent();
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
+
+            await ButtonUpdateDB();
         }
 
         private async void ButtonUpdateDB_Click(object sender, RoutedEventArgs e)
         {
-            _userCommits.Clear();
-            _users.Clear();
-            _userTasks.Clear();
-            
+            await ButtonUpdateDB();
+        }
+
+        private async System.Threading.Tasks.Task ButtonUpdateDB()
+        {
+            Commits.Clear();
+            Users.Clear();
+            UserTasks.Clear();
+            SelectedUser = string.Empty;
+            SelectedTask = string.Empty;
+
 
             ReaderFileLog readerLog = new ReaderFileLog() { FileName = Settings.FullNameFileLogs };
             List<Models.Commit> listCommits = await readerLog.ReadFileAsync();
             foreach (Models.Commit item in listCommits)
-                _allCommits.Add(item);
+                AllCommits.Add(item);
 
             _groupedCommitByUser = listCommits.GroupBy(f => f.UserName);
 
             foreach (var item in _groupedCommitByUser)
-                _users.Add(item.Key);
+                Users.Add(item.Key);
 
-            _users.Sort();
+            Users.Sort();
+
+            Bindings.Update();
         }
 
         private async void ButtonGetFileNameLog_Click(object sender, RoutedEventArgs e)
@@ -90,14 +98,35 @@ namespace ComparisonAssistant
 
         private void ComboBoxUser_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            UserTasks.Clear();
             foreach (IGrouping<string, Models.Commit> itemGroup in _groupedCommitByUser.Where(f => f.Key == SelectedUser))
             {
                 foreach (var item in itemGroup.GroupBy(f => f.Task))
                 {
-                    _userTasks.Add(item.Key);
+                    UserTasks.Add(item.Key);
                 }
             }
-            _userTasks.Sort();
+            UserTasks.Sort();
+        }
+
+        private void ComboBoxTask_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            List<Models.Commit> listCommits = new List<Models.Commit>();
+            foreach (IGrouping<string, Models.Commit> itemGroup in _groupedCommitByUser.Where(f => f.Key == SelectedUser))
+            {
+                foreach (Models.Commit item in itemGroup.Where(f => f.Task == SelectedTask))
+                {
+                    listCommits.Add(item);
+                }
+            }
+
+            listCommits.Sort((a, b) => -a.Date.CompareTo(b.Date));
+
+            Commits.Clear();
+            foreach (Models.Commit item in listCommits)
+                Commits.Add(item);
+
+            Bindings.Update();
         }
     }
 }

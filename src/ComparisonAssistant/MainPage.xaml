@@ -30,7 +30,7 @@
             <Border Height="5"/>
             <ComboBox Header="Пользователь" Width="300" ItemsSource="{x:Bind Users}" SelectedItem="{x:Bind SelectedUser, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectionChanged="ComboBoxUser_SelectionChanged"/>
             <Border Height="5"/>
-            <ComboBox Header="Задача" Width="300" ItemsSource="{x:Bind UserTasks}"/>
+            <ComboBox Header="Задача" Width="300" ItemsSource="{x:Bind UserTasks}"  SelectedItem="{x:Bind SelectedTask, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectionChanged="ComboBoxTask_SelectionChanged"/>
             <Border Height="5"/>
             <Button Content="Обновить" VerticalAlignment="Bottom" Width="300" Click="ButtonUpdateDB_Click"/>
             <Border Height="5"/>
@@ -43,10 +43,10 @@
         </StackPanel>
 
         <Grid Grid.Column="3" Grid.Row="1">
-            <toolControls:DataGrid ItemsSource="{x:Bind Commits}">
+            <toolControls:DataGrid ItemsSource="{x:Bind Commits, Mode=OneWay}">
                 <toolControls:DataGrid.Columns>
-                    <toolControls:DataGridTextColumn Header="Статус" Binding="{Binding UserName}" Width="150"/>
-                    <toolControls:DataGridTextColumn Header="Полное имя" Binding="{Binding Comment}" Width="*"/>
+                    <toolControls:DataGridTextColumn Header="Дата" Binding="{Binding Date}" Width="160"/>
+                    <toolControls:DataGridTextColumn Header="Комментарий" Binding="{Binding Comment}" Width="*"/>
                 </toolControls:DataGrid.Columns>
             </toolControls:DataGrid>
         </Grid>
