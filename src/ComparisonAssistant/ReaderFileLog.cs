@@ -14,7 +14,7 @@ namespace ComparisonAssistant
     internal class ReaderFileLog
     {
         private readonly string _separatorCommit = " --- ";
-        private string _patternFindTaskName = "DEV-[0-9]*";
+        private readonly string _patternFindTaskName = "DEV-[0-9]*";
 
         internal string FileName { get; set; }
 
