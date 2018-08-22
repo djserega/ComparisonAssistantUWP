@@ -28,9 +28,9 @@
 
         <StackPanel Grid.Column="1" Grid.Row="1">
             <Border Height="5"/>
-            <ComboBox Header="Пользователь" Width="300"/>
+            <ComboBox Header="Пользователь" Width="300" ItemsSource="{x:Bind Users}" SelectedItem="{x:Bind SelectedUser, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectionChanged="ComboBoxUser_SelectionChanged"/>
             <Border Height="5"/>
-            <ComboBox Header="Задача" Width="300"/>
+            <ComboBox Header="Задача" Width="300" ItemsSource="{x:Bind UserTasks}"/>
             <Border Height="5"/>
             <Button Content="Обновить" VerticalAlignment="Bottom" Width="300" Click="ButtonUpdateDB_Click"/>
             <Border Height="5"/>
@@ -43,10 +43,10 @@
         </StackPanel>
 
         <Grid Grid.Column="3" Grid.Row="1">
-            <toolControls:DataGrid>
+            <toolControls:DataGrid ItemsSource="{x:Bind Commits}">
                 <toolControls:DataGrid.Columns>
-                    <toolControls:DataGridTextColumn Header="Статус"/>
-                    <toolControls:DataGridTextColumn Header="Полное имя"/>
+                    <toolControls:DataGridTextColumn Header="Статус" Binding="{Binding UserName}" Width="150"/>
+                    <toolControls:DataGridTextColumn Header="Полное имя" Binding="{Binding Comment}" Width="*"/>
                 </toolControls:DataGrid.Columns>
             </toolControls:DataGrid>
         </Grid>
