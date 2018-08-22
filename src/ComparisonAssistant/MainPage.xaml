@@ -28,9 +28,10 @@
 
         <StackPanel Grid.Column="1" Grid.Row="1">
             <Border Height="5"/>
-            <ComboBox Header="Пользователь" Width="300" ItemsSource="{x:Bind Users}" SelectedItem="{x:Bind SelectedUser, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectionChanged="ComboBoxUser_SelectionChanged"/>
+            <ComboBox Header="Пользователь" Width="300" ItemsSource="{x:Bind Users}" SelectedItem="{x:Bind SelectedFilters.SelectedUser, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectionChanged="ComboBoxUser_SelectionChanged"/>
             <Border Height="5"/>
-            <ComboBox Header="Задача" Width="300" ItemsSource="{x:Bind UserTasks}"  SelectedItem="{x:Bind SelectedTask, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectionChanged="ComboBoxTask_SelectionChanged"/>
+            <ComboBox x:Name="ComboBoxTask" Header="Задача" Width="300" SelectedItem="{x:Bind SelectedFilters.SelectedTask, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectionChanged="ComboBoxTask_SelectionChanged"/>
+            <!--ItemsSource="{x:Bind UserTasks}" -->
             <Border Height="5"/>
             <Button Content="Обновить" VerticalAlignment="Bottom" Width="300" Click="ButtonUpdateDB_Click"/>
             <Border Height="5"/>
