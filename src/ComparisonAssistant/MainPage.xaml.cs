@@ -130,11 +130,44 @@ namespace ComparisonAssistant
         {
             Commits.Clear();
 
+            FillTableCommits();
+        }
+
+        private void FillTableCommits()
+        {
             if (SelectedFilters.SelectedTask != null)
                 if (_dictionaryUserTasks.ContainsKey(SelectedFilters.SelectedUser))
                     foreach (Models.Commit item in _dictionaryUserTasks[SelectedFilters.SelectedUser])
-                        if (SelectedFilters.SelectedTask == item.Task)
-                            Commits.Add(item);
+                    {
+                        if (SelectedFilters.SelectedTask != item.Task)
+                            continue;
+
+
+
+                        Commits.Add(item);
+                    }
+        }
+
+        private void CalendarDatePickerDateStart_DateChanged(CalendarDatePicker sender, CalendarDatePickerDateChangedEventArgs args)
+        {
+            FillTableCommits();
+        }
+
+        private void CalendarDatePickerDateEnd_DateChanged(CalendarDatePicker sender, CalendarDatePickerDateChangedEventArgs args)
+        {
+            FillTableCommits();
+        }
+
+        private void MenuFlyoutItemSelectedDateEnd_Click(object sender, RoutedEventArgs e)
+        {
+            SelectedFilters.SelectedDateEnd = DateTime.Now;
+            Bindings.Update();
+        }
+
+        private void MenuFlyoutItemSelectedDateStart_Click(object sender, RoutedEventArgs e)
+        {
+            SelectedFilters.SelectedDateStart = DateTime.Now;
+            Bindings.Update();
         }
     }
 }
