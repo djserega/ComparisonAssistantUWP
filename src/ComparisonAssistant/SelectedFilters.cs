@@ -10,6 +10,8 @@ namespace ComparisonAssistant
     {
         public string SelectedUser { get; set; } = string.Empty;
         public string SelectedTask { get; set; } = string.Empty;
+        public DateTime SelectedDateStart { get; set; } = DateTime.MinValue;
+        public DateTime SelectedDateEnd { get; set; } = DateTime.MaxValue;
 
         public void ClearFilter()
         {
