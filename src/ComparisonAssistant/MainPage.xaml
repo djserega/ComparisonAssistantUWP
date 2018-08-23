@@ -11,7 +11,7 @@
     <Page.Resources>
         <local:TimeConverter x:Key="TimeConverter"/>
     </Page.Resources>
-    
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="10"/>
@@ -54,15 +54,23 @@
             </CalendarDatePicker>
             <Border Height="5"/>
             <TextBlock Text="Отбор по периоду"/>
-            <CalendarView Width="300" SelectionMode="Multiple" FirstDayOfWeek="Monday" RequestedTheme="Default"/>
+            <CalendarView x:Name="CalendarViewDateTaskChanged" Width="300" Height="290" SelectionMode="Multiple" FirstDayOfWeek="Monday" SelectedDatesChanged="CalendarViewDateTaskChanged_SelectedDatesChanged"/>
+            <!--MinDate="{x:Bind SelectedFilters.DateTaskChangedMin, Mode=TwoWay, Converter={StaticResource TimeConverter}}"-->
+            <!--MaxDate="{x:Bind SelectedFilters.DateTaskChangedMax, Mode=TwoWay, Converter={StaticResource TimeConverter}}"-->
         </StackPanel>
 
         <Grid Grid.Column="3" Grid.Row="1">
-            <toolControls:DataGrid ItemsSource="{x:Bind Commits, Mode=OneWay}">
+            <toolControls:DataGrid ItemsSource="{x:Bind Commits, Mode=OneWay}" SelectedItem="{x:Bind SelectedFilters.SelectedCommit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 <toolControls:DataGrid.Columns>
                     <toolControls:DataGridTextColumn Header="Дата" Binding="{Binding Date}" Width="160"/>
                     <toolControls:DataGridTextColumn Header="Комментарий" Binding="{Binding Comment}" Width="*"/>
                 </toolControls:DataGrid.Columns>
+                <toolControls:DataGrid.ContextFlyout>
+                    <MenuFlyout>
+                        <MenuFlyoutItem Text="Перейти к дню в календаре" Click="MenuFlyoutItemGoDayCalendar_Click"/>
+                        <MenuFlyoutItem Text="Исключить день" Click="MenuFlyoutItemOffDayCalendar_Click"/>
+                    </MenuFlyout>
+                </toolControls:DataGrid.ContextFlyout>
             </toolControls:DataGrid>
         </Grid>
 

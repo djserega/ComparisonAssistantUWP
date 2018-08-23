@@ -141,6 +141,8 @@ namespace ComparisonAssistant
         private void FillTableCommits()
         {
             Commits.Clear();
+            SelectedFilters.ClearDateTaskChanged();
+            CalendarViewDateTaskChanged.SelectedDates.Clear();
 
             if (SelectedFilters.SelectedTask != null)
                 if (_dictionaryUserTasks.ContainsKey(SelectedFilters.SelectedUser))
@@ -152,6 +154,15 @@ namespace ComparisonAssistant
                             && item.Date <= SelectedFilters.SelectedDateEnd.EndDay())
                             {
                                 Commits.Add(item);
+
+                                if (SelectedFilters.DateTaskChangedMin > item.Date
+                                    || SelectedFilters.DateTaskChangedMin == DateTime.MinValue)
+                                    SelectedFilters.DateTaskChangedMin = item.Date;
+                                if (SelectedFilters.DateTaskChangedMax < item.Date
+                                    || SelectedFilters.DateTaskChangedMax == DateTime.MaxValue)
+                                    SelectedFilters.DateTaskChangedMax = item.Date;
+
+                                CalendarViewDateTaskChanged.SelectedDates.Add(item.Date);
                             }
                         }
                     }
@@ -177,6 +188,38 @@ namespace ComparisonAssistant
         {
             SelectedFilters.SelectedDateStart = DateTime.Now;
             Bindings.Update();
+        }
+
+        private void CalendarViewDateTaskChanged_SelectedDatesChanged(CalendarView sender, CalendarViewSelectedDatesChangedEventArgs args)
+        {
+            List<DateTimeOffset> listRemovedDates = args.RemovedDates.ToList();
+
+            for (int i = Commits.Count - 1; i >= 0; --i)
+            {
+                if (listRemovedDates.FirstOrDefault(f => f.Date.StartDay() == Commits[i].Date.StartDay()) != default(DateTimeOffset))
+                    Commits.RemoveAt(i);
+            }
+        }
+
+        private void MenuFlyoutItemGoDayCalendar_Click(object sender, RoutedEventArgs e)
+        {
+            if (SelectedFilters.SelectedCommit != null)
+                CalendarViewDateTaskChanged.SetDisplayDate(new DateTimeOffset(SelectedFilters.SelectedCommit.Date));
+        }
+
+        private void MenuFlyoutItemOffDayCalendar_Click(object sender, RoutedEventArgs e)
+        {
+            if (SelectedFilters.SelectedCommit != null)
+            {
+                List<DateTimeOffset> selectedDates = CalendarViewDateTaskChanged.SelectedDates.ToList();
+
+                DateTime dayCommit = SelectedFilters.SelectedCommit.Date.StartDay();
+                for (int i = selectedDates.Count - 1; i >= 0; --i)
+                {
+                    if (selectedDates[i].Date == dayCommit)
+                        CalendarViewDateTaskChanged.SelectedDates.RemoveAt(i);
+                }
+            }
         }
     }
 }
