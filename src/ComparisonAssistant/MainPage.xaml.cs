@@ -1,14 +1,21 @@
-﻿using System;
+﻿using ComparisonAssistant.Additions;
+
+using System;
+
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+
 using Windows.Storage;
 using Windows.Storage.AccessCache;
 using Windows.Storage.Pickers;
+
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -128,23 +135,25 @@ namespace ComparisonAssistant
 
         private void ComboBoxTask_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Commits.Clear();
-
             FillTableCommits();
         }
 
         private void FillTableCommits()
         {
+            Commits.Clear();
+
             if (SelectedFilters.SelectedTask != null)
                 if (_dictionaryUserTasks.ContainsKey(SelectedFilters.SelectedUser))
                     foreach (Models.Commit item in _dictionaryUserTasks[SelectedFilters.SelectedUser])
                     {
-                        if (SelectedFilters.SelectedTask != item.Task)
-                            continue;
-
-
-
-                        Commits.Add(item);
+                        if (SelectedFilters.SelectedTask == item.Task)
+                        {
+                            if (item.Date >= SelectedFilters.SelectedDateStart
+                            && item.Date <= SelectedFilters.SelectedDateEnd.EndDay())
+                            {
+                                Commits.Add(item);
+                            }
+                        }
                     }
         }
 
