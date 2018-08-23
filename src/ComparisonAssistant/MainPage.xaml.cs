@@ -128,8 +128,6 @@ namespace ComparisonAssistant
 
         private void ComboBoxTask_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            //SelectedFilters.SelectedTask = ComboBoxTask.SelectedItem as string;
-
             Commits.Clear();
 
             if (SelectedFilters.SelectedTask != null)
