@@ -67,24 +67,27 @@ namespace ComparisonAssistant
             ReaderFileLog readerLog = new ReaderFileLog() { FileName = Settings.FullNameFileLogs };
             List<Models.Commit> listCommits = await readerLog.ReadFileAsync();
 
-            _groupedCommitByUser = listCommits.GroupBy(f => f.UserName);
-            foreach (IGrouping<string, Models.Commit> itemGroup in _groupedCommitByUser)
+            _groupedCommitByUser = listCommits?.GroupBy(f => f.UserName);
+            if (_groupedCommitByUser != null)
             {
-                List<Models.Commit> list = new List<Models.Commit>();
+                foreach (IGrouping<string, Models.Commit> itemGroup in _groupedCommitByUser)
+                {
+                    List<Models.Commit> list = new List<Models.Commit>();
 
-                foreach (var item in itemGroup)
-                    list.Add(item);
+                    foreach (var item in itemGroup)
+                        list.Add(item);
 
-                _dictionaryUserTasks.Add(itemGroup.Key, list);
+                    _dictionaryUserTasks.Add(itemGroup.Key, list);
+                }
+
+                List<string> listUsers = new List<string>();
+                foreach (var item in _groupedCommitByUser)
+                    listUsers.Add(item.Key);
+                listUsers.Sort();
+
+                foreach (string item in listUsers)
+                    Users.Add(item);
             }
-
-            List<string> listUsers = new List<string>();
-            foreach (var item in _groupedCommitByUser)
-                listUsers.Add(item.Key);
-            listUsers.Sort();
-
-            foreach (string item in listUsers)
-                Users.Add(item);
         }
 
         private void ClearProperties()

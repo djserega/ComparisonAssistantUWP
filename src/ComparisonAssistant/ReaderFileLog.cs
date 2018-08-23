@@ -20,6 +20,9 @@ namespace ComparisonAssistant
 
         internal async Task<List<Models.Commit>> ReadFileAsync()
         {
+            if (string.IsNullOrEmpty(FileName))
+                return null;
+
             StorageFile storageFile = null;
             try
             {
@@ -27,13 +30,25 @@ namespace ComparisonAssistant
             }
             catch (Exception ex)
             {
-                Dialogs.Show(ex.Message);
+                Dialogs.ShowPopups("Ошибка чтения файла логов.\nВозможно нет доступа к файлу или файл не существует.");
             }
 
             if (storageFile == null)
                 return null;
 
-            IList<string> dataFile = await FileIO.ReadLinesAsync(storageFile);
+            IList<string> dataFile = null;
+
+            try
+            {
+                dataFile = await FileIO.ReadLinesAsync(storageFile, Windows.Storage.Streams.UnicodeEncoding.Utf8);
+            }
+            catch (Exception ex)
+            {
+                Dialogs.ShowPopups("Ошибка чтения файла.\n" + ex.Message);
+            }
+
+            if (dataFile == null)
+                return null;
 
             List<Models.Commit> listTasks = new List<Models.Commit>();
 
