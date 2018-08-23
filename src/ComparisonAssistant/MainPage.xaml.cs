@@ -32,10 +32,9 @@ namespace ComparisonAssistant
         internal Settings Settings { get; set; } = new Settings();
         internal SelectedFilters SelectedFilters { get; set; } = new SelectedFilters();
 
-        public List<Models.Commit> AllCommits { get; } = new List<Models.Commit>();
         public ObservableCollection<Models.Commit> Commits { get; } = new ObservableCollection<Models.Commit>();
-        public List<string> Users { get; } = new List<string>();
-        public List<string> UserTasks { get; } = new List<string>();
+        public ObservableCollection<string> Users { get; } = new ObservableCollection<string>();
+        public ObservableCollection<string> UserTasks { get; } = new ObservableCollection<string>();
 
         public MainPage()
         {
@@ -56,17 +55,10 @@ namespace ComparisonAssistant
 
         private async System.Threading.Tasks.Task ButtonUpdateDB()
         {
-            Commits.Clear();
-            Users.Clear();
-            UserTasks.Clear();
-            SelectedFilters.ClearFilter();
-            _dictionaryUserTasks.Clear();
-
+            ClearProperties();
 
             ReaderFileLog readerLog = new ReaderFileLog() { FileName = Settings.FullNameFileLogs };
             List<Models.Commit> listCommits = await readerLog.ReadFileAsync();
-            foreach (Models.Commit item in listCommits)
-                AllCommits.Add(item);
 
             _groupedCommitByUser = listCommits.GroupBy(f => f.UserName);
             foreach (IGrouping<string, Models.Commit> itemGroup in _groupedCommitByUser)
@@ -79,13 +71,22 @@ namespace ComparisonAssistant
                 _dictionaryUserTasks.Add(itemGroup.Key, list);
             }
 
-
+            List<string> listUsers = new List<string>();
             foreach (var item in _groupedCommitByUser)
-                Users.Add(item.Key);
+                listUsers.Add(item.Key);
+            listUsers.Sort();
 
-            Users.Sort();
+            foreach (string item in listUsers)
+                Users.Add(item);
+        }
 
-            Bindings.Update();
+        private void ClearProperties()
+        {
+            Commits.Clear();
+            Users.Clear();
+            UserTasks.Clear();
+            SelectedFilters.ClearFilter();
+            _dictionaryUserTasks.Clear();
         }
 
         private async void ButtonGetFileNameLog_Click(object sender, RoutedEventArgs e)
@@ -108,39 +109,34 @@ namespace ComparisonAssistant
 
         private void ComboBoxUser_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            SelectedFilters.SelectedTask = ""; // null;
-            //ComboBoxTask.SelectedIndex = -1;
+            SelectedFilters.SelectedTask = "";
 
             Commits.Clear();
             UserTasks.Clear();
 
-            if (_dictionaryUserTasks.ContainsKey(SelectedFilters.SelectedUser))
-                foreach (Models.Commit item in _dictionaryUserTasks[SelectedFilters.SelectedUser])
-                    if (UserTasks.FirstOrDefault(f => f == item.Task) == null)
-                        UserTasks.Add(item.Task);
+            List<string> listTask = new List<string>();
+            if (SelectedFilters.SelectedUser != null)
+                if (_dictionaryUserTasks.ContainsKey(SelectedFilters.SelectedUser))
+                    foreach (Models.Commit item in _dictionaryUserTasks[SelectedFilters.SelectedUser])
+                        if (listTask.FirstOrDefault(f => f == item.Task) == null)
+                            listTask.Add(item.Task);
+            listTask.Sort();
 
-            UserTasks.Sort();
-
-            ComboBoxTask.ItemsSource = UserTasks;
+            foreach (string item in listTask)
+                UserTasks.Add(item);
         }
 
         private void ComboBoxTask_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            //SelectedFilters.SelectedTask = ComboBoxTask.SelectedItem as string;
+
             Commits.Clear();
 
             if (SelectedFilters.SelectedTask != null)
-            {
-                //List<Models.Commit> listCommits = new List<Models.Commit>();
                 if (_dictionaryUserTasks.ContainsKey(SelectedFilters.SelectedUser))
                     foreach (Models.Commit item in _dictionaryUserTasks[SelectedFilters.SelectedUser])
                         if (SelectedFilters.SelectedTask == item.Task)
                             Commits.Add(item);
-
-                //foreach (Models.Commit item in listCommits)
-                //    Commits.Add(item);
-            }
-
-            Bindings.Update();
         }
     }
 }
