@@ -169,6 +169,12 @@ namespace ComparisonAssistant
                             }
                         }
                     }
+
+            if (SelectedFilters.DateTaskChangedMax == DateTime.MaxValue)
+                SetDisplayDateCalendatView(DateTime.Now);
+            else
+                SetDisplayDateCalendatView(SelectedFilters.DateTaskChangedMax);
+
         }
 
         private void CalendarDatePickerDateStart_DateChanged(CalendarDatePicker sender, CalendarDatePickerDateChangedEventArgs args)
@@ -198,16 +204,14 @@ namespace ComparisonAssistant
             List<DateTimeOffset> listRemovedDates = args.RemovedDates.ToList();
 
             for (int i = Commits.Count - 1; i >= 0; --i)
-            {
                 if (listRemovedDates.FirstOrDefault(f => f.Date.StartDay() == Commits[i].Date.StartDay()) != default(DateTimeOffset))
                     Commits.RemoveAt(i);
-            }
         }
 
         private void MenuFlyoutItemGoDayCalendar_Click(object sender, RoutedEventArgs e)
         {
             if (SelectedFilters.SelectedCommit != null)
-                CalendarViewDateTaskChanged.SetDisplayDate(new DateTimeOffset(SelectedFilters.SelectedCommit.Date));
+                SetDisplayDateCalendatView(SelectedFilters.SelectedCommit.Date);
         }
 
         private void MenuFlyoutItemOffDayCalendar_Click(object sender, RoutedEventArgs e)
@@ -218,11 +222,14 @@ namespace ComparisonAssistant
 
                 DateTime dayCommit = SelectedFilters.SelectedCommit.Date.StartDay();
                 for (int i = selectedDates.Count - 1; i >= 0; --i)
-                {
                     if (selectedDates[i].Date == dayCommit)
                         CalendarViewDateTaskChanged.SelectedDates.RemoveAt(i);
-                }
             }
+        }
+
+        private void SetDisplayDateCalendatView(DateTime date)
+        {
+            CalendarViewDateTaskChanged.SetDisplayDate(new DateTimeOffset(date));
         }
     }
 }
