@@ -40,11 +40,11 @@ namespace ComparisonAssistant
 
             try
             {
-                dataFile = await FileIO.ReadLinesAsync(storageFile, Windows.Storage.Streams.UnicodeEncoding.Utf8);
+                dataFile = await FileIO.ReadLinesAsync(storageFile);
             }
             catch (Exception ex)
             {
-                Dialogs.ShowPopups("Ошибка чтения файла.\n" + ex.Message);
+                Dialogs.ShowPopups("Ошибка чтения файла. Файл должен быть в кодировке UTF-8.\n" + ex.Message);
             }
 
             if (dataFile == null)
