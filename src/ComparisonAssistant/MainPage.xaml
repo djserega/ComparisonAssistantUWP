@@ -31,7 +31,7 @@
 
         <StackPanel Grid.Column="1" Grid.Row="1">
             <Border Height="5"/>
-            <Button Content="Прочитать файл логов" VerticalAlignment="Bottom" Width="300" Click="ButtonUpdateDB_Click"/>
+            <Button Content="Прочитать файл логов" Width="300" Click="ButtonUpdateDB_Click"/>
             <Border Height="5"/>
             <ComboBox Header="Пользователь" Width="300" ItemsSource="{x:Bind Users}" SelectedItem="{x:Bind SelectedFilters.SelectedUser, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectionChanged="ComboBoxUser_SelectionChanged"/>
             <Border Height="5"/>
@@ -57,6 +57,8 @@
             <CalendarView x:Name="CalendarViewDateTaskChanged" Width="300" Height="290" SelectionMode="Multiple" FirstDayOfWeek="Monday" SelectedDatesChanged="CalendarViewDateTaskChanged_SelectedDatesChanged"/>
             <!--MinDate="{x:Bind SelectedFilters.DateTaskChangedMin, Mode=TwoWay, Converter={StaticResource TimeConverter}}"-->
             <!--MaxDate="{x:Bind SelectedFilters.DateTaskChangedMax, Mode=TwoWay, Converter={StaticResource TimeConverter}}"-->
+            <Border Height="5"/>
+            <Button Content="Обновить список коммитов" Width="300" Click="ButtonUpdateListCommits_Click"/>
         </StackPanel>
 
         <Grid Grid.Column="3" Grid.Row="1">

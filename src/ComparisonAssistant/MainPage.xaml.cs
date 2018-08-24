@@ -231,5 +231,10 @@ namespace ComparisonAssistant
         {
             CalendarViewDateTaskChanged.SetDisplayDate(new DateTimeOffset(date));
         }
+
+        private void ButtonUpdateListCommits_Click(object sender, RoutedEventArgs e)
+        {
+            FillTableCommits();
+        }
     }
 }
