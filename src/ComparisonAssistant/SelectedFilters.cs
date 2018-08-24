@@ -14,7 +14,8 @@ namespace ComparisonAssistant
         public DateTime SelectedDateEnd { get; set; } = DateTime.MaxValue;
         public DateTime DateTaskChangedMin { get; set; } = DateTime.MinValue;
         public DateTime DateTaskChangedMax { get; set; } = DateTime.MaxValue;
-        public Models.Commit SelectedCommit { get; set; } 
+        public Models.Commit SelectedCommit { get; set; }
+        public Models.Commit SelectedCommit2 { get; set; }
 
         public void ClearFilter()
         {

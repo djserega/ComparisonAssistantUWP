@@ -236,5 +236,16 @@ namespace ComparisonAssistant
         {
             FillTableCommits();
         }
+
+        private void DataGridCommits_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            if (SelectedFilters.SelectedCommit != null
+                && SelectedFilters.SelectedCommit == SelectedFilters.SelectedCommit2)
+            {
+                SelectedFilters.SelectedCommit = null;
+                Bindings.Update();
+            }
+            SelectedFilters.SelectedCommit2 = SelectedFilters.SelectedCommit;
+        }
     }
 }

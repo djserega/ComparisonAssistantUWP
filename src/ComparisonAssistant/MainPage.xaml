@@ -28,11 +28,10 @@
             <RowDefinition Height="5"/>
         </Grid.RowDefinitions>
 
-
         <StackPanel Grid.Column="1" Grid.Row="1">
             <Border Height="5"/>
             <Button Content="Прочитать файл логов" Width="300" Click="ButtonUpdateDB_Click"/>
-            <Border Height="5"/>
+            <Border Height="5" Margin="3" Background="{ThemeResource AppBarItemPointerOverBackgroundThemeBrush}"/>
             <ComboBox Header="Пользователь" Width="300" ItemsSource="{x:Bind Users}" SelectedItem="{x:Bind SelectedFilters.SelectedUser, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectionChanged="ComboBoxUser_SelectionChanged"/>
             <Border Height="5"/>
             <ComboBox x:Name="ComboBoxTask" Header="Задача" Width="300"  SelectionChanged="ComboBoxTask_SelectionChanged" SelectedItem="{x:Bind SelectedFilters.SelectedTask, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{x:Bind UserTasks}"/>
@@ -57,12 +56,14 @@
             <CalendarView x:Name="CalendarViewDateTaskChanged" Width="300" Height="290" SelectionMode="Multiple" FirstDayOfWeek="Monday" SelectedDatesChanged="CalendarViewDateTaskChanged_SelectedDatesChanged"/>
             <!--MinDate="{x:Bind SelectedFilters.DateTaskChangedMin, Mode=TwoWay, Converter={StaticResource TimeConverter}}"-->
             <!--MaxDate="{x:Bind SelectedFilters.DateTaskChangedMax, Mode=TwoWay, Converter={StaticResource TimeConverter}}"-->
-            <Border Height="5"/>
+            <Border Height="5" Margin="3" Background="{ThemeResource AppBarItemPointerOverBackgroundThemeBrush}"/>
             <Button Content="Обновить список коммитов" Width="300" Click="ButtonUpdateListCommits_Click"/>
         </StackPanel>
 
+        <Border Grid.Column="2" Grid.Row="1" Margin="3" Background="{ThemeResource AppBarItemPointerOverBackgroundThemeBrush}"/>
+
         <Grid Grid.Column="3" Grid.Row="1">
-            <toolControls:DataGrid ItemsSource="{x:Bind Commits, Mode=OneWay}" SelectedItem="{x:Bind SelectedFilters.SelectedCommit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            <toolControls:DataGrid ItemsSource="{x:Bind Commits, Mode=OneWay}" SelectedItem="{x:Bind SelectedFilters.SelectedCommit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Tapped="DataGridCommits_Tapped">
                 <toolControls:DataGrid.Columns>
                     <toolControls:DataGridTextColumn Header="Дата" Binding="{Binding Date}" Width="160"/>
                     <toolControls:DataGridTextColumn Header="Комментарий" Binding="{Binding Comment}" Width="*"/>
@@ -75,13 +76,13 @@
                 </toolControls:DataGrid.ContextFlyout>
                 <toolControls:DataGrid.ItemDetailsTemplate>
                     <DataTemplate>
-                        <StackPanel>
+                        <StackPanel Background="{ThemeResource SystemControlBackgroundListLowBrush}" Margin="7,5">
                             <ListView ItemsSource="{Binding Files}">
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock Text="{Binding Mode}"/>
-                                            <Border Width="3"/>
+                                            <Border Width="5"/>
                                             <TextBlock Text="{Binding FullName}"/>
                                         </StackPanel>
                                     </DataTemplate>
