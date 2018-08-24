@@ -73,6 +73,23 @@
                         <MenuFlyoutItem Text="Исключить день" Click="MenuFlyoutItemOffDayCalendar_Click"/>
                     </MenuFlyout>
                 </toolControls:DataGrid.ContextFlyout>
+                <toolControls:DataGrid.ItemDetailsTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <ListView ItemsSource="{Binding Files}">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{Binding Mode}"/>
+                                            <Border Width="3"/>
+                                            <TextBlock Text="{Binding FullName}"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </StackPanel>
+                    </DataTemplate>
+                </toolControls:DataGrid.ItemDetailsTemplate>
             </toolControls:DataGrid>
         </Grid>
 
