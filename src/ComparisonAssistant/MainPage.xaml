@@ -98,9 +98,11 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="30"/>
+                <ColumnDefinition Width="30"/>
             </Grid.ColumnDefinitions>
             <TextBox Grid.Column="0" Header="Путь к файлу логов" Text="{x:Bind Settings.FullNameFileLogs, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             <Button Grid.Column="1" VerticalAlignment="Bottom" Content="..." Click="ButtonGetFileNameLog_Click"/>
+            <Button Grid.Column="2" VerticalAlignment="Bottom" Content=">" Click="ButtonOpenFileLog_Click"/>
         </Grid>
 
     </Grid>
