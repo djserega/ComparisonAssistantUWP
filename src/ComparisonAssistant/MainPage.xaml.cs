@@ -8,7 +8,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
-
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 
@@ -33,15 +33,14 @@ namespace ComparisonAssistant
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        #region Private fields
+
         private IEnumerable<IGrouping<string, Models.Commit>> _groupedCommitByUser;
         private Dictionary<string, List<Models.Commit>> _dictionaryUserTasks = new Dictionary<string, List<Models.Commit>>();
 
-        internal Settings Settings { get; set; } = new Settings();
-        internal SelectedFilters SelectedFilters { get; set; } = new SelectedFilters();
+        #endregion
 
-        public ObservableCollection<Models.Commit> Commits { get; } = new ObservableCollection<Models.Commit>();
-        public ObservableCollection<string> Users { get; } = new ObservableCollection<string>();
-        public ObservableCollection<string> UserTasks { get; } = new ObservableCollection<string>();
+        #region Constructors & overrides methods
 
         public MainPage()
         {
@@ -52,15 +51,172 @@ namespace ComparisonAssistant
         {
             base.OnNavigatedTo(e);
 
-            await ButtonUpdateDB();
+            await UpdateDBAsync();
         }
+
+        #endregion
+
+        #region Internal properties
+
+        internal Settings Settings { get; set; } = new Settings();
+        internal SelectedFilters SelectedFilters { get; set; } = new SelectedFilters();
+
+        #endregion
+
+        #region Public readonly properties
+
+        public ObservableCollection<Models.Commit> Commits { get; } = new ObservableCollection<Models.Commit>();
+        public ObservableCollection<string> Users { get; } = new ObservableCollection<string>();
+        public ObservableCollection<string> UserTasks { get; } = new ObservableCollection<string>();
+
+        #endregion
+
+        #region Buttons
 
         private async void ButtonUpdateDB_Click(object sender, RoutedEventArgs e)
         {
-            await ButtonUpdateDB();
+            await UpdateDBAsync();
         }
 
-        private async System.Threading.Tasks.Task ButtonUpdateDB()
+        private void ButtonUpdateListCommits_Click(object sender, RoutedEventArgs e)
+        {
+            FillTableCommits();
+        }
+
+        private async void ButtonGetFileNameLog_Click(object sender, RoutedEventArgs e)
+        {
+            FileOpenPicker openPicker = new FileOpenPicker
+            {
+                ViewMode = PickerViewMode.List,
+                SuggestedStartLocation = PickerLocationId.Downloads
+            };
+            openPicker.FileTypeFilter.Add(".txt");
+
+            StorageFile file = await openPicker.PickSingleFileAsync();
+            if (file != null)
+            {
+                StorageApplicationPermissions.FutureAccessList.AddOrReplace("FullFileNameLog", file);
+                Settings.FullNameFileLogs = file.Path;
+                Bindings.Update();
+            }
+        }
+
+        private async void ButtonOpenFileLog_Click(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrWhiteSpace(Settings.FullNameFileLogs))
+            {
+                StorageFile storageFile = null;
+                try
+                {
+                    storageFile = await StorageFile.GetFileFromPathAsync(Settings.FullNameFileLogs);
+                }
+                catch (Exception ex)
+                {
+                    Dialogs.ShowPopups("Не удалось получить доступ к файлу.\nВозможно нет доступа к файлу или файл не существует.");
+                }
+
+                if (storageFile == null)
+                    return;
+
+                await Launcher.LaunchFileAsync(storageFile);
+            }
+        }
+
+        #endregion
+
+        #region Handlers elements
+
+        private void ComboBoxUser_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            SelectedFilters.SelectedTask = "";
+
+            Commits.Clear();
+            UserTasks.Clear();
+
+            List<string> listTask = new List<string>();
+            if (SelectedFilters.SelectedUser != null)
+                if (_dictionaryUserTasks.ContainsKey(SelectedFilters.SelectedUser))
+                    foreach (Models.Commit item in _dictionaryUserTasks[SelectedFilters.SelectedUser])
+                        if (listTask.FirstOrDefault(f => f == item.Task) == null)
+                            listTask.Add(item.Task);
+            listTask.Sort();
+
+            foreach (string item in listTask)
+                UserTasks.Add(item);
+        }
+
+        private void ComboBoxTask_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            FillTableCommits();
+        }
+
+        private void CalendarDatePickerDateStart_DateChanged(CalendarDatePicker sender, CalendarDatePickerDateChangedEventArgs args)
+        {
+            FillTableCommits();
+        }
+
+        private void CalendarDatePickerDateEnd_DateChanged(CalendarDatePicker sender, CalendarDatePickerDateChangedEventArgs args)
+        {
+            FillTableCommits();
+        }
+
+        private void CalendarViewDateTaskChanged_SelectedDatesChanged(CalendarView sender, CalendarViewSelectedDatesChangedEventArgs args)
+        {
+            List<DateTimeOffset> listRemovedDates = args.RemovedDates.ToList();
+
+            for (int i = Commits.Count - 1; i >= 0; --i)
+                if (listRemovedDates.FirstOrDefault(f => f.Date.StartDay() == Commits[i].Date.StartDay()) != default(DateTimeOffset))
+                    Commits.RemoveAt(i);
+        }
+
+        private void MenuFlyoutItemSelectedDateEnd_Click(object sender, RoutedEventArgs e)
+        {
+            SelectedFilters.SelectedDateEnd = DateTime.Now;
+            Bindings.Update();
+        }
+
+        private void MenuFlyoutItemSelectedDateStart_Click(object sender, RoutedEventArgs e)
+        {
+            SelectedFilters.SelectedDateStart = DateTime.Now;
+            Bindings.Update();
+        }
+
+
+        private void MenuFlyoutItemGoDayCalendar_Click(object sender, RoutedEventArgs e)
+        {
+            if (SelectedFilters.SelectedCommit != null)
+                SetDisplayDateCalendatView(SelectedFilters.SelectedCommit.Date);
+        }
+
+        private void MenuFlyoutItemOffDayCalendar_Click(object sender, RoutedEventArgs e)
+        {
+            if (SelectedFilters.SelectedCommit != null)
+            {
+                List<DateTimeOffset> selectedDates = CalendarViewDateTaskChanged.SelectedDates.ToList();
+
+                DateTime dayCommit = SelectedFilters.SelectedCommit.Date.StartDay();
+                for (int i = selectedDates.Count - 1; i >= 0; --i)
+                    if (selectedDates[i].Date == dayCommit)
+                        CalendarViewDateTaskChanged.SelectedDates.RemoveAt(i);
+            }
+        }
+
+        private void DataGridCommits_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            if (SelectedFilters.SelectedCommit != null
+                && SelectedFilters.SelectedCommit == SelectedFilters.SelectedCommit2)
+            {
+                SelectedFilters.SelectedCommit = null;
+                Bindings.Update();
+            }
+            SelectedFilters.SelectedCommit2 = SelectedFilters.SelectedCommit;
+        }
+
+        #endregion
+
+        #region Other
+
+        private async Task UpdateDBAsync()
         {
             ClearProperties();
 
@@ -88,57 +244,6 @@ namespace ComparisonAssistant
                 foreach (string item in listUsers)
                     Users.Add(item);
             }
-        }
-
-        private void ClearProperties()
-        {
-            Commits.Clear();
-            Users.Clear();
-            UserTasks.Clear();
-            SelectedFilters.ClearFilter();
-            _dictionaryUserTasks.Clear();
-        }
-
-        private async void ButtonGetFileNameLog_Click(object sender, RoutedEventArgs e)
-        {
-            FileOpenPicker openPicker = new FileOpenPicker
-            {
-                ViewMode = PickerViewMode.List,
-                SuggestedStartLocation = PickerLocationId.Downloads
-            };
-            openPicker.FileTypeFilter.Add(".txt");
-
-            StorageFile file = await openPicker.PickSingleFileAsync();
-            if (file != null)
-            {
-                StorageApplicationPermissions.FutureAccessList.AddOrReplace("FullFileNameLog", file);
-                Settings.FullNameFileLogs = file.Path;
-                Bindings.Update();
-            }
-        }
-
-        private void ComboBoxUser_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            SelectedFilters.SelectedTask = "";
-
-            Commits.Clear();
-            UserTasks.Clear();
-
-            List<string> listTask = new List<string>();
-            if (SelectedFilters.SelectedUser != null)
-                if (_dictionaryUserTasks.ContainsKey(SelectedFilters.SelectedUser))
-                    foreach (Models.Commit item in _dictionaryUserTasks[SelectedFilters.SelectedUser])
-                        if (listTask.FirstOrDefault(f => f == item.Task) == null)
-                            listTask.Add(item.Task);
-            listTask.Sort();
-
-            foreach (string item in listTask)
-                UserTasks.Add(item);
-        }
-
-        private void ComboBoxTask_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            FillTableCommits();
         }
 
         private void FillTableCommits()
@@ -177,54 +282,13 @@ namespace ComparisonAssistant
 
         }
 
-        private void CalendarDatePickerDateStart_DateChanged(CalendarDatePicker sender, CalendarDatePickerDateChangedEventArgs args)
+        private void ClearProperties()
         {
-            FillTableCommits();
-        }
-
-        private void CalendarDatePickerDateEnd_DateChanged(CalendarDatePicker sender, CalendarDatePickerDateChangedEventArgs args)
-        {
-            FillTableCommits();
-        }
-
-        private void MenuFlyoutItemSelectedDateEnd_Click(object sender, RoutedEventArgs e)
-        {
-            SelectedFilters.SelectedDateEnd = DateTime.Now;
-            Bindings.Update();
-        }
-
-        private void MenuFlyoutItemSelectedDateStart_Click(object sender, RoutedEventArgs e)
-        {
-            SelectedFilters.SelectedDateStart = DateTime.Now;
-            Bindings.Update();
-        }
-
-        private void CalendarViewDateTaskChanged_SelectedDatesChanged(CalendarView sender, CalendarViewSelectedDatesChangedEventArgs args)
-        {
-            List<DateTimeOffset> listRemovedDates = args.RemovedDates.ToList();
-
-            for (int i = Commits.Count - 1; i >= 0; --i)
-                if (listRemovedDates.FirstOrDefault(f => f.Date.StartDay() == Commits[i].Date.StartDay()) != default(DateTimeOffset))
-                    Commits.RemoveAt(i);
-        }
-
-        private void MenuFlyoutItemGoDayCalendar_Click(object sender, RoutedEventArgs e)
-        {
-            if (SelectedFilters.SelectedCommit != null)
-                SetDisplayDateCalendatView(SelectedFilters.SelectedCommit.Date);
-        }
-
-        private void MenuFlyoutItemOffDayCalendar_Click(object sender, RoutedEventArgs e)
-        {
-            if (SelectedFilters.SelectedCommit != null)
-            {
-                List<DateTimeOffset> selectedDates = CalendarViewDateTaskChanged.SelectedDates.ToList();
-
-                DateTime dayCommit = SelectedFilters.SelectedCommit.Date.StartDay();
-                for (int i = selectedDates.Count - 1; i >= 0; --i)
-                    if (selectedDates[i].Date == dayCommit)
-                        CalendarViewDateTaskChanged.SelectedDates.RemoveAt(i);
-            }
+            Commits.Clear();
+            Users.Clear();
+            UserTasks.Clear();
+            SelectedFilters.ClearFilter();
+            _dictionaryUserTasks.Clear();
         }
 
         private void SetDisplayDateCalendatView(DateTime date)
@@ -232,41 +296,6 @@ namespace ComparisonAssistant
             CalendarViewDateTaskChanged.SetDisplayDate(new DateTimeOffset(date));
         }
 
-        private void ButtonUpdateListCommits_Click(object sender, RoutedEventArgs e)
-        {
-            FillTableCommits();
-        }
-
-        private void DataGridCommits_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            if (SelectedFilters.SelectedCommit != null
-                && SelectedFilters.SelectedCommit == SelectedFilters.SelectedCommit2)
-            {
-                SelectedFilters.SelectedCommit = null;
-                Bindings.Update();
-            }
-            SelectedFilters.SelectedCommit2 = SelectedFilters.SelectedCommit;
-        }
-
-        private async void ButtonOpenFileLog_Click(object sender, RoutedEventArgs e)
-        {
-            if (!string.IsNullOrWhiteSpace(Settings.FullNameFileLogs))
-            {
-                StorageFile storageFile = null;
-                try
-                {
-                    storageFile = await StorageFile.GetFileFromPathAsync(Settings.FullNameFileLogs);
-                }
-                catch (Exception ex)
-                {
-                    Dialogs.ShowPopups("Не удалось получить доступ к файлу.\nВозможно нет доступа к файлу или файл не существует.");
-                }
-
-                if (storageFile == null)
-                    return;
-
-                await Launcher.LaunchFileAsync(storageFile);
-            }
-        }
+        #endregion
     }
 }
