@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ComparisonAssistant.Additions;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -15,6 +16,8 @@ namespace ComparisonAssistant
     {
         private readonly string _separatorCommit = " --- ";
         private readonly string _patternFindTaskName = "DEV-[0-9]*";
+        private readonly List<string> _removePrefixFileName = new Models.NonusePrefixFileName().ListText;
+        private readonly List<string> _listSkipFiles = new Models.SkipFileNames().ListFileName;
 
         internal string FileName { get; set; }
 
@@ -109,10 +112,11 @@ namespace ComparisonAssistant
                     {
                         string fileName = GetNameObject(file[1]);
 
-                        for (int i = 0; i < lastCommitTasks.Count; i++)
-                        {
-                            lastCommitTasks[i].Files.Add(new Models.File(file[0], file[1]));
-                        }
+                        if (_listSkipFiles.FirstOrDefault(f => f == fileName) == null)
+                            for (int i = 0; i < lastCommitTasks.Count; i++)
+                            {
+                                lastCommitTasks[i].Files.Add(new Models.File(file[0], fileName));
+                            }
                     }
                     #endregion
                 }
@@ -132,10 +136,10 @@ namespace ComparisonAssistant
 
         private string GetNameObject(string fileName)
         {
-            //foreach (string prefix in _removePrefixFileName)
-            //{
-            //    fileName = fileName.RemoveStartText(prefix);
-            //}
+            foreach (string prefix in _removePrefixFileName)
+            {
+                fileName = fileName.RemoveStartText(prefix);
+            }
 
             //foreach (KeyValuePair<string, string> item in _translateObject)
             //{
