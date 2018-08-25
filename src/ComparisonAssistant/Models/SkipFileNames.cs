@@ -8,6 +8,6 @@ namespace ComparisonAssistant.Models
 {
     public class SkipFileNames
     {
-        public string FileName { get; set; }
+        public List<string> ListFileName { get; set; } = new List<string> { "VERSION", "renames.txt", "AUTHORS", ".gitignore", "README.md", "Jenkinsfile" };
     }
 }
