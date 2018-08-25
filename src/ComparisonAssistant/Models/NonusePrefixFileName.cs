@@ -8,6 +8,6 @@ namespace ComparisonAssistant.Models
 {
     public class NonusePrefixFileName
     {
-        public string Text { get; set; }
+        public List<string> ListText { get; set; } = new List<string> { "src/cf/" };
     }
 }
