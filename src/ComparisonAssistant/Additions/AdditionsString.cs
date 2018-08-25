@@ -15,5 +15,13 @@ namespace ComparisonAssistant.Additions
             else
                 return text;
         }
+
+        public static string RemoveEndText(this string text, string find)
+        {
+            if (text.EndsWith(find))
+                return text.Remove(text.Length - find.Length);
+            else
+                return text;
+        }
     }
 }

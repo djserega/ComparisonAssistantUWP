@@ -57,71 +57,85 @@ namespace ComparisonAssistant
 
             List<Models.Commit> lastCommitTasks = new List<Models.Commit>();
 
-            foreach (string row in dataFile)
+            try
             {
-                bool thisCommit = new Regex(Regex.Escape(_separatorCommit)).Matches(row).Count == 2;
-                if (thisCommit)
+                string fileName;
+                foreach (string row in dataFile)
                 {
-                    if (lastCommitTasks.Count > 0)
+                    bool thisCommit = new Regex(Regex.Escape(_separatorCommit)).Matches(row).Count == 2;
+                    if (thisCommit)
                     {
-                        foreach (Models.Commit item in lastCommitTasks)
+                        if (lastCommitTasks.Count > 0)
                         {
-                            listTasks.Add(item);
-                        }
-                        lastCommitTasks.Clear();
-                    }
-
-                    #region Read commit
-                    string[] commitParts = row.Split(new string[] { _separatorCommit }, StringSplitOptions.RemoveEmptyEntries);
-
-                    if (commitParts.Count() == 3)
-                    {
-                        DateTime dateCommit;
-                        try
-                        {
-                            dateCommit = DateTime.Parse(commitParts[2]);
-                        }
-                        catch (FormatException)
-                        {
-                            dateCommit = DateTime.MinValue;
-                        }
-
-                        string userName = commitParts[0];
-                        string comment = commitParts[1];
-
-                        MatchCollection matches = new Regex(_patternFindTaskName).Matches(comment);
-                        if (matches.Count > 0)
-                        {
-                            foreach (Match item in matches)
-                                lastCommitTasks.Add(new Models.Commit(userName, comment, dateCommit, item.Value));
-                        }
-                        else
-                        {
-                            lastCommitTasks.Add(new Models.Commit(userName, comment, dateCommit, "---"));
-                        }
-                    }
-                    #endregion
-
-                }
-                else
-                {
-                    #region Read log
-                    string[] file = row.Split(new string[] { "\t" }, StringSplitOptions.None);
-
-                    if (file.Count() == 2 || file.Count() == 3)
-                    {
-                        string fileName = GetNameObject(file[1]);
-
-                        if (_listSkipFiles.FirstOrDefault(f => f == fileName) == null)
-                            for (int i = 0; i < lastCommitTasks.Count; i++)
+                            foreach (Models.Commit item in lastCommitTasks)
                             {
-                                lastCommitTasks[i].Files.Add(new Models.File(file[0], fileName));
+                                listTasks.Add(item);
                             }
-                    }
-                    #endregion
-                }
-            }
+                            lastCommitTasks.Clear();
+                        }
 
+                        #region Read commit
+                        string[] commitParts = row.Split(new string[] { _separatorCommit }, StringSplitOptions.RemoveEmptyEntries);
+
+                        if (commitParts.Count() == 3)
+                        {
+                            DateTime dateCommit;
+                            try
+                            {
+                                dateCommit = DateTime.Parse(commitParts[2]);
+                            }
+                            catch (FormatException)
+                            {
+                                dateCommit = DateTime.MinValue;
+                            }
+
+                            string userName = commitParts[0];
+                            string comment = commitParts[1];
+
+                            MatchCollection matches = new Regex(_patternFindTaskName).Matches(comment);
+                            if (matches.Count > 0)
+                            {
+                                foreach (Match item in matches)
+                                    lastCommitTasks.Add(new Models.Commit(userName, comment, dateCommit, item.Value));
+                            }
+                            else
+                            {
+                                lastCommitTasks.Add(new Models.Commit(userName, comment, dateCommit, "---"));
+                            }
+                        }
+                        #endregion
+
+                    }
+                    else
+                    {
+                        #region Read log
+                        string[] file = row.Split(new string[] { "\t" }, StringSplitOptions.None);
+
+                        if (file.Count() == 2 || file.Count() == 3)
+                        {
+                            fileName = GetNameObject(file[1]);
+
+                            if (_listSkipFiles.FirstOrDefault(f => f == fileName) == null)
+                                for (int i = 0; i < lastCommitTasks.Count; i++)
+                                {
+                                    try
+                                    {
+                                        lastCommitTasks[i].Files.Add(new Models.File(file[0], fileName));
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                    }
+                                }
+                        }
+                        #endregion
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Dialogs.ShowPopups("Ошибка чтения данных файла.\n" + ex.Message);
+            }
             if (lastCommitTasks.Count > 0)
             {
                 foreach (Models.Commit item in lastCommitTasks)
