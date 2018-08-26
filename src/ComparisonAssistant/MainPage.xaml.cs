@@ -218,6 +218,9 @@ namespace ComparisonAssistant
 
         private async Task UpdateDBAsync()
         {
+            string selectedUser = SelectedFilters.SelectedUser;
+            string selectedTask = SelectedFilters.SelectedTask;
+
             ClearProperties();
 
             ReaderFileLog readerLog = new ReaderFileLog() { FileName = Settings.FullNameFileLogs };
@@ -243,7 +246,23 @@ namespace ComparisonAssistant
 
                 foreach (string item in listUsers)
                     Users.Add(item);
-            } 
+            }
+
+            if (!string.IsNullOrEmpty(selectedUser))
+                if (!string.IsNullOrEmpty(Users.FirstOrDefault(f => f == selectedUser)))
+                {
+                    SelectedFilters.SelectedUser = selectedUser;
+
+                    Bindings.Update();
+
+                    if (!string.IsNullOrEmpty(selectedTask))
+                        if (!string.IsNullOrEmpty(UserTasks.FirstOrDefault(f => f == selectedTask)))
+                        {
+                            SelectedFilters.SelectedTask = selectedTask;
+
+                            Bindings.Update();
+                        }
+                }
         }
 
         private void FillTableCommits()
