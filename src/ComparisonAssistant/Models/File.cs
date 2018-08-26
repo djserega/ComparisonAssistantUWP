@@ -34,8 +34,6 @@ namespace ComparisonAssistant.Models
 
         private void ParseFileParts()
         {
-            Dictionary<string, string> dictionaryTranslate = GetDictionaryTranslateObject();
-
             for (int i = FileParts.MaxIndex; i >= 0; --i)
             {
                 string part = FileParts[i];
@@ -47,9 +45,9 @@ namespace ComparisonAssistant.Models
                 if (part == "Forms")
                     IsForm = true;
 
-                if (dictionaryTranslate.ContainsKey(part))
+                if (StaticSettings.DictionaryTranslate.ContainsKey(part))
                 {
-                    TypeObjectName = dictionaryTranslate[part];
+                    TypeObjectName = StaticSettings.DictionaryTranslate[part];
                     ObjectName = FileParts[i + 1];
                 }
 
@@ -64,50 +62,6 @@ namespace ComparisonAssistant.Models
 
             if (ObjectName.EndsWith(".xml"))
                 ObjectName = ObjectName.RemoveEndText(".xml");
-        }
-
-        internal Dictionary<string, string> GetDictionaryTranslateObject()
-        {
-            Dictionary<string, string> dict = new Dictionary<string, string>() {
-                    { "Configurations", "Конфигурация"},
-                    { "Languages", "Язык"},
-                    { "Subsystems", "Подсистема"},
-                    { "StyleItems", "Элемент стиля"},
-                    { "CommonPictures", "Общая картинка"},
-                    { "Interfaces", "Интерфейс"},
-                    { "SessionParameters", "Параметр сеанса"},
-                    { "Roles", "Роль"},
-                    { "CommonTemplates", "Общий макет"},
-                    { "FilterCriterias", "Критерий отбора"},
-                    { "CommonModules", "Общий модуль"},
-                    { "CommonAttributes", "Общий реквизит"},
-                    { "ExchangePlanes", "План обмена"},
-                    { "XDTOPackages", "XDTO-пакет"},
-                    { "WebServices", "Web-сервис"},
-                    { "EventSubscriptions", "Подписка на событие"},
-                    { "ScheduledJobs", "Регламентное задание"},
-                    { "FunctionalOptions", "Функциональная опция"},
-                    { "FunctionalOptionsParameters", "Параметр функциональных опций"},
-                    { "CommonCommands", "Общая команда"},
-                    { "CommandGroupes", "Группа команд"},
-                    { "Constants", "Константа"},
-                    { "CommonForms", "Общая форма"},
-                    { "Catalogs", "Справочник"},
-                    { "Documents", "Документ"},
-                    { "DocumentNumerators", "Нумератор документов"},
-                    { "Sequences", "Последовательность"},
-                    { "DocumentJournals", "Журнал документов"},
-                    { "Enums", "Перечисление"},
-                    { "Reports", "Отчет"},
-                    { "DataProcessors", "Обработка"},
-                    { "InformationRegisters", "Регистр сведений"},
-                    { "AccumulationRegisters", "Регистр накопления"},
-                    { "ChartOfCharacteristicTypes", "План видов характеристик"},
-                    { "BusinessProcess", "Бизнес процесс"},
-                    { "Tasks", "Задачи"},
-                    { "ExternalDataSources", "Внешний источники данных"}
-                };
-            return dict;
         }
     }
 }

@@ -1,0 +1,59 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ComparisonAssistant
+{
+    internal class StaticSettings
+    {
+        internal static Dictionary<string, string> DictionaryTranslate { get; } = GetDictionaryTranslateObject();
+
+        private static Dictionary<string, string> GetDictionaryTranslateObject()
+        {
+            Dictionary<string, string> dict = new Dictionary<string, string>() {
+                    { "AccumulationRegisters", "РегистрыНакопления"},
+                    { "BusinessProcesses", "БизнесПроцессы"},
+                    { "Catalogs", "Справочники"},
+                    { "ChartsOfCharacteristicTypes", "ПланыВидовХарактеристик"},
+                    { "CommandGroups", "ГруппыКоманд"},
+                    { "CommonAttributes", "ОбщиеРеквизиты"},
+                    { "CommonCommands", "ОбщиеКоманды"},
+                    { "CommonForms", "ОбщиеФормы"},
+                    { "CommonModules", "ОбщиеМодули"},
+                    { "CommonPictures", "ОбщиеКартинки"},
+                    { "CommonTemplates", "ОбщиеМакеты"},
+                    { "Configurations", "Конфигурации"},
+                    { "Constants", "Константы"},
+                    { "DataProcessors", "Обработки"},
+                    { "DocumentJournals", "ЖурналыДокументов"},
+                    { "DocumentNumerators", "НумераторыДокументов"},
+                    { "Documents", "Документы"},
+                    { "Enums", "Перечисления"},
+                    { "EventSubscriptions", "ПодпискиНаСобытие"},
+                    { "ExchangePlans", "ПланыОбмена"},
+                    { "ExternalDataSources", "ВнешниеИсточникиДанных"},
+                    { "FilterCriterias", "КритерииОтбора"},
+                    { "FunctionalOptions", "ФункциональныеОпции"},
+                    { "FunctionalOptionsParameters", "ПараметрыФункциональныхОпций"},
+                    { "InformationRegisters", "РегистрыСведений"},
+                    { "Interfaces", "Интерфейсы"},
+                    { "Languages", "Языки"},
+                    { "Reports", "Отчеты"},
+                    { "Roles", "Роли"},
+                    { "ScheduledJobs", "РегламентныеЗадания"},
+                    { "Sequences", "Последовательности"},
+                    { "SessionParameters", "ПараметрыСеанса"},
+                    { "StyleItems", "ЭлементыСтиля"},
+                    { "Styles", "Стили"},
+                    { "Subsystems", "Подсистемы"},
+                    { "Tasks", "Задачи"},
+                    { "WebServices", "Web-сервисы"},
+                    { "XDTOPackages", "XDTO-пакеты"}
+                };
+            return dict;
+        }
+
+    }
+}

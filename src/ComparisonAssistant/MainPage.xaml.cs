@@ -243,7 +243,7 @@ namespace ComparisonAssistant
 
                 foreach (string item in listUsers)
                     Users.Add(item);
-            }
+            } 
         }
 
         private void FillTableCommits()
