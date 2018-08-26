@@ -181,7 +181,6 @@ namespace ComparisonAssistant
             Bindings.Update();
         }
 
-
         private void MenuFlyoutItemGoDayCalendar_Click(object sender, RoutedEventArgs e)
         {
             if (SelectedFilters.SelectedCommit != null)
@@ -203,13 +202,17 @@ namespace ComparisonAssistant
 
         private void DataGridCommits_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            if (SelectedFilters.SelectedCommit != null
-                && SelectedFilters.SelectedCommit == SelectedFilters.SelectedCommit2)
+            if (e.OriginalSource is TextBlock source
+                && source.Parent == null)
             {
-                SelectedFilters.SelectedCommit = null;
-                Bindings.Update();
+                if (SelectedFilters.SelectedCommit != null
+                   && SelectedFilters.SelectedCommit == SelectedFilters.SelectedCommit2)
+                {
+                    SelectedFilters.SelectedCommit = null;
+                    Bindings.Update();
+                }
+                SelectedFilters.SelectedCommit2 = SelectedFilters.SelectedCommit;
             }
-            SelectedFilters.SelectedCommit2 = SelectedFilters.SelectedCommit;
         }
 
         #endregion

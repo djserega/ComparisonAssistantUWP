@@ -83,7 +83,11 @@
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock Text="{Binding Mode}"/>
                                             <Border Width="5"/>
-                                            <TextBlock Text="{Binding FullName}"/>
+                                            <TextBlock Text="{Binding TypeObjectName}"/>
+                                            <TextBlock Text="."/>
+                                            <TextBlock Text="{Binding ObjectName}"/>
+                                            <!--<Border Width="5"/>
+                                            <TextBlock Text="{Binding FullName}"/>-->
                                         </StackPanel>
                                     </DataTemplate>
                                 </ListView.ItemTemplate>
