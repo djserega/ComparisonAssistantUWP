@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:toolControls="using:MyToolkit.Controls"
+    x:Name="PageMainPage"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     <Page.Resources>
@@ -58,6 +59,8 @@
             <!--MaxDate="{x:Bind SelectedFilters.DateTaskChangedMax, Mode=TwoWay, Converter={StaticResource TimeConverter}}"-->
             <Border Height="5" Margin="3" Background="{ThemeResource AppBarItemPointerOverBackgroundThemeBrush}"/>
             <Button Content="Обновить список коммитов" Width="300" Click="ButtonUpdateListCommits_Click"/>
+            <Border Height="5" Margin="3" Background="{ThemeResource AppBarItemPointerOverBackgroundThemeBrush}"/>
+            <CheckBox Content="Показать имя измененнного файла" Width="300" Checked="ChecboxVisibleFileDetailsFullname_Checked" Unchecked="ChecboxVisibleFileDetailsFullname_Unchecked"/>
         </StackPanel>
 
         <Border Grid.Column="2" Grid.Row="1" Margin="3" Background="{ThemeResource AppBarItemPointerOverBackgroundThemeBrush}"/>
@@ -80,15 +83,29 @@
                             <ListView ItemsSource="{Binding Files}">
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="{Binding Mode}"/>
-                                            <Border Width="5"/>
-                                            <TextBlock Text="{Binding TypeObjectName}"/>
-                                            <TextBlock Text="."/>
-                                            <TextBlock Text="{Binding ObjectName}"/>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="0"/> <!--0-->
+                                                <ColumnDefinition Width="auto"/> <!--1-->
+                                                <ColumnDefinition Width="4"/> <!--2-->
+                                                <ColumnDefinition Width="50"/> <!--3-->
+                                                <ColumnDefinition Width="60"/> <!--4-->
+                                                <ColumnDefinition Width="50"/> <!--5-->
+                                                <ColumnDefinition Width="auto"/> <!--6-->
+                                                <ColumnDefinition Width="*"/> <!--7-->
+                                            </Grid.ColumnDefinitions>
+                                            <!--<TextBlock Grid.Column="0" Text="{Binding Mode}" VerticalAlignment="Center"/>-->
+                                            <TextBlock Grid.Column="1" Text="{Binding Name}" VerticalAlignment="Center"/>
+                                            <!--<TextBlock Grid.Column="1" Text="{Binding TypeObjectName}" VerticalAlignment="Center"/>
+                                            <TextBlock Grid.Column="2" Text="." VerticalAlignment="Center"/>
+                                            <TextBlock Grid.Column="3" Text="{Binding ObjectName}" VerticalAlignment="Center"/>-->
                                             <!--<Border Width="5"/>
                                             <TextBlock Text="{Binding FullName}"/>-->
-                                        </StackPanel>
+                                            <RadioButton Grid.Column="3" Content="М" IsChecked="{Binding IsModule}" IsEnabled="False"/>
+                                            <RadioButton Grid.Column="4" Content="ММ" IsChecked="{Binding IsModuleManager}" IsEnabled="False"/>
+                                            <RadioButton Grid.Column="5" Content="Ф" IsChecked="{Binding IsForm}" IsEnabled="False"/>
+                                            <TextBox x:Name="FileDetailsTextBoxFullName" Grid.Column="6" Text="{Binding FullName}" IsEnabled="False" Visibility="{Binding Path=VisibilityFullNameChangedFiles}"/>
+                                        </Grid>
                                     </DataTemplate>
                                 </ListView.ItemTemplate>
                             </ListView>

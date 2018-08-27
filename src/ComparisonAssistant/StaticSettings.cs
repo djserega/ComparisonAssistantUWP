@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI.Xaml;
 
 namespace ComparisonAssistant
 {
-    internal class StaticSettings
+    public class StaticSettings
     {
         internal static Dictionary<string, string> DictionaryTranslate { get; } = GetDictionaryTranslateObject();
 
@@ -55,5 +56,8 @@ namespace ComparisonAssistant
             return dict;
         }
 
+        public static bool VisibleFullNameChangedFiles { get; set; } = false;
+
+        public static Visibility VisibilityFullNameChangedFiles { get => VisibleFullNameChangedFiles ? Visibility.Visible : Visibility.Collapsed; }
     }
 }

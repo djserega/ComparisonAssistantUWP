@@ -319,5 +319,20 @@ namespace ComparisonAssistant
         }
 
         #endregion
+
+        private void ChecboxVisibleFileDetailsFullname_Checked(object sender, RoutedEventArgs e)
+        {
+            ChangeVisibilityFileDetailsTextBoxFullName();
+        }
+
+        private void ChecboxVisibleFileDetailsFullname_Unchecked(object sender, RoutedEventArgs e)
+        {
+            ChangeVisibilityFileDetailsTextBoxFullName();
+        }
+
+        private void ChangeVisibilityFileDetailsTextBoxFullName()
+        {
+            StaticSettings.VisibleFullNameChangedFiles = !StaticSettings.VisibleFullNameChangedFiles;
+        }
     }
 }

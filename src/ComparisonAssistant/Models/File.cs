@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI.Xaml;
 
 namespace ComparisonAssistant.Models
 {
@@ -20,6 +21,7 @@ namespace ComparisonAssistant.Models
 
         public string Mode { get; set; } = string.Empty;
         public string FullName { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
         public FilePart FileParts { get; set; }
 
         public string TypeObjectName { get; set; } = string.Empty;
@@ -31,6 +33,8 @@ namespace ComparisonAssistant.Models
         public bool ChangedObjectForm { get; set; } = false;
         public bool ChangeModuleForm { get; set; } = false;
         public bool ChangeObject { get; set; } = false;
+
+        public Visibility VisibilityFullNameChangedFiles { get => StaticSettings.VisibilityFullNameChangedFiles; }
 
         private void ParseFileParts()
         {
@@ -62,6 +66,16 @@ namespace ComparisonAssistant.Models
 
             if (ObjectName.EndsWith(".xml"))
                 ObjectName = ObjectName.RemoveEndText(".xml");
+            if (FullName == "Ext/ParentConfigurations.bin")
+            {
+                TypeObjectName = "Конфигурация";
+                ObjectName = "Поддержка";
+            }
+
+            Name = TypeObjectName;
+            if (!string.IsNullOrWhiteSpace(ObjectName))
+                Name += "." + ObjectName;
+
         }
     }
 }
