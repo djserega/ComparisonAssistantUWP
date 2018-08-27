@@ -31,30 +31,50 @@
 
         <StackPanel Grid.Column="1" Grid.Row="1">
             <Border Height="5"/>
+            <TextBlock Text="Фильтры по дате" Style="{ThemeResource BaseTextBlockStyle}"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="5"/>
+                    <ColumnDefinition Width="295"/>
+                </Grid.ColumnDefinitions>
+                <Border Grid.Column="0" Margin="0,0,2,0" Background="{ThemeResource AppBarItemPointerOverBackgroundThemeBrush}"/>
+                <StackPanel Grid.Column="1" Orientation="Vertical">
+                    <CalendarDatePicker Header="Изменено" DateFormat="{}{day.integer(2)}.{month.integer(2)}.{year.full}" PlaceholderText="" Width="295" Date="{x:Bind SelectedFilters.SelectedDateStart, Mode=TwoWay, Converter={StaticResource TimeConverter}}" DateChanged="CalendarDatePickerDateStart_DateChanged">
+                        <CalendarDatePicker.ContextFlyout>
+                            <MenuFlyout>
+                                <MenuFlyoutItem Text="Сегодня" Click="MenuFlyoutItemSelectedDateStart_Click"/>
+                            </MenuFlyout>
+                        </CalendarDatePicker.ContextFlyout>
+                    </CalendarDatePicker>
+                    <Border Height="5"/>
+                    <CalendarDatePicker Header="Обновлено" DateFormat="{}{day.integer(2)}.{month.integer(2)}.{year.full}" PlaceholderText="" Width="295" Date="{x:Bind SelectedFilters.SelectedDateEnd, Mode=TwoWay, Converter={StaticResource TimeConverter}}" DateChanged="CalendarDatePickerDateEnd_DateChanged">
+                        <CalendarDatePicker.ContextFlyout>
+                            <MenuFlyout>
+                                <MenuFlyoutItem Text="Сегодня" Click="MenuFlyoutItemSelectedDateEnd_Click"/>
+                            </MenuFlyout>
+                        </CalendarDatePicker.ContextFlyout>
+                    </CalendarDatePicker>
+                </StackPanel>
+            </Grid>
+            <Border Height="5" Margin="3" Background="{ThemeResource AppBarItemPointerOverBackgroundThemeBrush}"/>
             <Button Content="Прочитать файл логов" Width="300" Click="ButtonUpdateDB_Click"/>
             <Border Height="5" Margin="3" Background="{ThemeResource AppBarItemPointerOverBackgroundThemeBrush}"/>
-            <ComboBox Header="Пользователь" Width="300" ItemsSource="{x:Bind Users}" SelectedItem="{x:Bind SelectedFilters.SelectedUser, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectionChanged="ComboBoxUser_SelectionChanged"/>
-            <Border Height="5"/>
-            <ComboBox x:Name="ComboBoxTask" Header="Задача" Width="300"  SelectionChanged="ComboBoxTask_SelectionChanged" SelectedItem="{x:Bind SelectedFilters.SelectedTask, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{x:Bind UserTasks}"/>
-            <Border Height="5"/>
-            <CalendarDatePicker Header="Изменено" DateFormat="{}{day.integer(2)}.{month.integer(2)}.{year.full}" PlaceholderText="" Width="300" Date="{x:Bind SelectedFilters.SelectedDateStart, Mode=TwoWay, Converter={StaticResource TimeConverter}}" DateChanged="CalendarDatePickerDateStart_DateChanged">
-                <CalendarDatePicker.ContextFlyout>
-                    <MenuFlyout>
-                        <MenuFlyoutItem Text="Сегодня" Click="MenuFlyoutItemSelectedDateStart_Click"/>
-                    </MenuFlyout>
-                </CalendarDatePicker.ContextFlyout>
-            </CalendarDatePicker>
-            <Border Height="5"/>
-            <CalendarDatePicker Header="Обновлено" DateFormat="{}{day.integer(2)}.{month.integer(2)}.{year.full}" PlaceholderText="" Width="300" Date="{x:Bind SelectedFilters.SelectedDateEnd, Mode=TwoWay, Converter={StaticResource TimeConverter}}" DateChanged="CalendarDatePickerDateEnd_DateChanged">
-                <CalendarDatePicker.ContextFlyout>
-                    <MenuFlyout>
-                        <MenuFlyoutItem Text="Сегодня" Click="MenuFlyoutItemSelectedDateEnd_Click"/>
-                    </MenuFlyout>
-                </CalendarDatePicker.ContextFlyout>
-            </CalendarDatePicker>
-            <Border Height="5"/>
-            <TextBlock Text="Отбор по периоду"/>
-            <CalendarView x:Name="CalendarViewDateTaskChanged" Width="300" Height="290" SelectionMode="Multiple" FirstDayOfWeek="Monday" SelectedDatesChanged="CalendarViewDateTaskChanged_SelectedDatesChanged"/>
+            <TextBlock Text="Фильтры по задачам" Style="{ThemeResource BaseTextBlockStyle}"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="5"/>
+                    <ColumnDefinition Width="295"/>
+                </Grid.ColumnDefinitions>
+                <Border Grid.Column="0" Margin="0,0,2,0" Background="{ThemeResource AppBarItemPointerOverBackgroundThemeBrush}"/>
+                <StackPanel Grid.Column="1">
+                    <ComboBox Header="Пользователь" Width="295" ItemsSource="{x:Bind Users}" SelectedItem="{x:Bind SelectedFilters.SelectedUser, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectionChanged="ComboBoxUser_SelectionChanged"/>
+                    <Border Height="5"/>
+                    <ComboBox x:Name="ComboBoxTask" Header="Задача" Width="295"  SelectionChanged="ComboBoxTask_SelectionChanged" SelectedItem="{x:Bind SelectedFilters.SelectedTask, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{x:Bind UserTasks}"/>
+                    <Border Height="5"/>
+                    <TextBlock Text="Отбор по периоду"/>
+                    <CalendarView x:Name="CalendarViewDateTaskChanged" Width="295" Height="290" SelectionMode="Multiple" FirstDayOfWeek="Monday" SelectedDatesChanged="CalendarViewDateTaskChanged_SelectedDatesChanged"/>
+                </StackPanel>
+            </Grid>
             <Border Height="5" Margin="3" Background="{ThemeResource AppBarItemPointerOverBackgroundThemeBrush}"/>
             <Button Content="Обновить список коммитов" Width="300" Click="ButtonUpdateListCommits_Click"/>
             <Border Height="5" Margin="3" Background="{ThemeResource AppBarItemPointerOverBackgroundThemeBrush}"/>
