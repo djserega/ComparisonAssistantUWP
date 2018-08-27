@@ -34,7 +34,7 @@ namespace ComparisonAssistant
                     { "EventSubscriptions", "ПодпискиНаСобытие"},
                     { "ExchangePlans", "ПланыОбмена"},
                     { "ExternalDataSources", "ВнешниеИсточникиДанных"},
-                    { "FilterCriterias", "КритерииОтбора"},
+                    { "FilterCriteria", "КритерииОтбора"},
                     { "FunctionalOptions", "ФункциональныеОпции"},
                     { "FunctionalOptionsParameters", "ПараметрыФункциональныхОпций"},
                     { "InformationRegisters", "РегистрыСведений"},
