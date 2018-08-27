@@ -55,8 +55,6 @@
             <Border Height="5"/>
             <TextBlock Text="Отбор по периоду"/>
             <CalendarView x:Name="CalendarViewDateTaskChanged" Width="300" Height="290" SelectionMode="Multiple" FirstDayOfWeek="Monday" SelectedDatesChanged="CalendarViewDateTaskChanged_SelectedDatesChanged"/>
-            <!--MinDate="{x:Bind SelectedFilters.DateTaskChangedMin, Mode=TwoWay, Converter={StaticResource TimeConverter}}"-->
-            <!--MaxDate="{x:Bind SelectedFilters.DateTaskChangedMax, Mode=TwoWay, Converter={StaticResource TimeConverter}}"-->
             <Border Height="5" Margin="3" Background="{ThemeResource AppBarItemPointerOverBackgroundThemeBrush}"/>
             <Button Content="Обновить список коммитов" Width="300" Click="ButtonUpdateListCommits_Click"/>
             <Border Height="5" Margin="3" Background="{ThemeResource AppBarItemPointerOverBackgroundThemeBrush}"/>
@@ -71,12 +69,14 @@
                     <toolControls:DataGridTextColumn Header="Дата" Binding="{Binding Date}" Width="160"/>
                     <toolControls:DataGridTextColumn Header="Комментарий" Binding="{Binding Comment}" Width="*"/>
                 </toolControls:DataGrid.Columns>
+         
                 <toolControls:DataGrid.ContextFlyout>
                     <MenuFlyout>
                         <MenuFlyoutItem Text="Перейти к дню в календаре" Click="MenuFlyoutItemGoDayCalendar_Click"/>
                         <MenuFlyoutItem Text="Исключить день" Click="MenuFlyoutItemOffDayCalendar_Click"/>
                     </MenuFlyout>
                 </toolControls:DataGrid.ContextFlyout>
+                
                 <toolControls:DataGrid.ItemDetailsTemplate>
                     <DataTemplate>
                         <StackPanel Background="{ThemeResource SystemControlBackgroundListLowBrush}" Margin="7,5">
@@ -94,13 +94,8 @@
                                                 <ColumnDefinition Width="auto"/> <!--6-->
                                                 <ColumnDefinition Width="*"/> <!--7-->
                                             </Grid.ColumnDefinitions>
-                                            <!--<TextBlock Grid.Column="0" Text="{Binding Mode}" VerticalAlignment="Center"/>-->
+                                     
                                             <TextBlock Grid.Column="1" Text="{Binding Name}" VerticalAlignment="Center"/>
-                                            <!--<TextBlock Grid.Column="1" Text="{Binding TypeObjectName}" VerticalAlignment="Center"/>
-                                            <TextBlock Grid.Column="2" Text="." VerticalAlignment="Center"/>
-                                            <TextBlock Grid.Column="3" Text="{Binding ObjectName}" VerticalAlignment="Center"/>-->
-                                            <!--<Border Width="5"/>
-                                            <TextBlock Text="{Binding FullName}"/>-->
                                             <RadioButton Grid.Column="3" Content="М" IsChecked="{Binding IsModule}" IsEnabled="False"/>
                                             <RadioButton Grid.Column="4" Content="ММ" IsChecked="{Binding IsModuleManager}" IsEnabled="False"/>
                                             <RadioButton Grid.Column="5" Content="Ф" IsChecked="{Binding IsForm}" IsEnabled="False"/>
@@ -112,6 +107,7 @@
                         </StackPanel>
                     </DataTemplate>
                 </toolControls:DataGrid.ItemDetailsTemplate>
+                
             </toolControls:DataGrid>
         </Grid>
 
@@ -121,6 +117,7 @@
                 <ColumnDefinition Width="30"/>
                 <ColumnDefinition Width="30"/>
             </Grid.ColumnDefinitions>
+           
             <TextBox Grid.Column="0" Header="Путь к файлу логов" Text="{x:Bind Settings.FullNameFileLogs, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             <Button Grid.Column="1" VerticalAlignment="Bottom" Content="..." Click="ButtonGetFileNameLog_Click"/>
             <Button Grid.Column="2" VerticalAlignment="Bottom" Content=">" Click="ButtonOpenFileLog_Click"/>
