@@ -112,7 +112,7 @@
     <Compile Include="ReaderFileLog.cs" />
     <Compile Include="SelectedFilters.cs" />
     <Compile Include="StaticSettings.cs" />
-    <Compile Include="TimeConverter.cs" />
+    <Compile Include="Converters.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">

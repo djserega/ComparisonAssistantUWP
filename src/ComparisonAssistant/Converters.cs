@@ -7,7 +7,7 @@ using Windows.UI.Xaml.Data;
 
 namespace ComparisonAssistant
 {
-    public class TimeConverter : IValueConverter
+    public sealed class TimeConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
             => new DateTimeOffset(((DateTime)value).ToUniversalTime());
