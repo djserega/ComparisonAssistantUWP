@@ -14,7 +14,6 @@ namespace ComparisonAssistant
         private ApplicationDataContainer _localSettings = ApplicationData.Current.LocalSettings;
         private readonly string _keyFullNameFileLogs = "FullNameFileLogs";
 
-
         public Settings()
         {
             if (!_localSettings.Values.ContainsKey(_keyFullNameFileLogs))
@@ -33,7 +32,6 @@ namespace ComparisonAssistant
                 SetValueLocalSettings(_keyFullNameFileLogs, value);
             }
         }
-
 
         private void SetValueLocalSettings(string key, object value)
         {

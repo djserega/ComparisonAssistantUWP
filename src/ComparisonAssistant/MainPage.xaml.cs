@@ -110,7 +110,7 @@ namespace ComparisonAssistant
                 {
                     storageFile = await StorageFile.GetFileFromPathAsync(Settings.FullNameFileLogs);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     Dialogs.ShowPopups("Не удалось получить доступ к файлу.\nВозможно нет доступа к файлу или файл не существует.");
                 }

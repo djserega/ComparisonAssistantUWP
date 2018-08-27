@@ -31,7 +31,7 @@ namespace ComparisonAssistant
             {
                 storageFile = await StorageFile.GetFileFromPathAsync(FileName);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 Dialogs.ShowPopups("Ошибка чтения файла логов.\nВозможно нет доступа к файлу или файл не существует.");
             }
@@ -122,7 +122,7 @@ namespace ComparisonAssistant
                                     {
                                         lastCommitTasks[i].Files.Add(new Models.File(file[0], fileName));
                                     }
-                                    catch (Exception ex)
+                                    catch (Exception)
                                     {
                                     }
                                 }
