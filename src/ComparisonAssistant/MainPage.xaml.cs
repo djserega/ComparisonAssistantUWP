@@ -215,6 +215,21 @@ namespace ComparisonAssistant
             }
         }
 
+        private void ChecboxVisibleFileDetailsFullname_Checked(object sender, RoutedEventArgs e)
+        {
+            ChangeVisibilityFileDetailsTextBoxFullName();
+        }
+
+        private void ChecboxVisibleFileDetailsFullname_Unchecked(object sender, RoutedEventArgs e)
+        {
+            ChangeVisibilityFileDetailsTextBoxFullName();
+        }
+
+        private void ChangeVisibilityFileDetailsTextBoxFullName()
+        {
+            StaticSettings.VisibleFullNameChangedFiles = !StaticSettings.VisibleFullNameChangedFiles;
+        }
+
         #endregion
 
         #region Other
@@ -232,19 +247,25 @@ namespace ComparisonAssistant
             _groupedCommitByUser = listCommits?.GroupBy(f => f.UserName);
             if (_groupedCommitByUser != null)
             {
+                List<string> listUsers = new List<string>();
+
                 foreach (IGrouping<string, Models.Commit> itemGroup in _groupedCommitByUser)
                 {
                     List<Models.Commit> list = new List<Models.Commit>();
 
-                    foreach (var item in itemGroup)
-                        list.Add(item);
+                    foreach (Models.Commit item in itemGroup)
+                    {
+                        if (DateIncludedInFilterPeriod(item.Date))
+                        {
+                            if (string.IsNullOrEmpty(listUsers.FirstOrDefault(f => f == itemGroup.Key)))
+                                listUsers.Add(itemGroup.Key);
+                            list.Add(item);
+                        }
+                    }
 
                     _dictionaryUserTasks.Add(itemGroup.Key, list);
                 }
 
-                List<string> listUsers = new List<string>();
-                foreach (var item in _groupedCommitByUser)
-                    listUsers.Add(item.Key);
                 listUsers.Sort();
 
                 foreach (string item in listUsers)
@@ -280,8 +301,7 @@ namespace ComparisonAssistant
                     {
                         if (SelectedFilters.SelectedTask == item.Task)
                         {
-                            if (item.Date >= SelectedFilters.SelectedDateStart
-                            && item.Date <= SelectedFilters.SelectedDateEnd.EndDay())
+                            if (DateIncludedInFilterPeriod(item.Date))
                             {
                                 Commits.Add(item);
 
@@ -318,21 +338,13 @@ namespace ComparisonAssistant
             CalendarViewDateTaskChanged.SetDisplayDate(new DateTimeOffset(date));
         }
 
+        private bool DateIncludedInFilterPeriod(DateTime date)
+        {
+            return date >= SelectedFilters.SelectedDateStart.StartDay()
+                && date <= SelectedFilters.SelectedDateEnd.EndDay();
+        }
+
         #endregion
 
-        private void ChecboxVisibleFileDetailsFullname_Checked(object sender, RoutedEventArgs e)
-        {
-            ChangeVisibilityFileDetailsTextBoxFullName();
-        }
-
-        private void ChecboxVisibleFileDetailsFullname_Unchecked(object sender, RoutedEventArgs e)
-        {
-            ChangeVisibilityFileDetailsTextBoxFullName();
-        }
-
-        private void ChangeVisibilityFileDetailsTextBoxFullName()
-        {
-            StaticSettings.VisibleFullNameChangedFiles = !StaticSettings.VisibleFullNameChangedFiles;
-        }
     }
 }
