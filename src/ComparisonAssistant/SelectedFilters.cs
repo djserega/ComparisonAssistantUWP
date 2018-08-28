@@ -21,7 +21,7 @@ namespace ComparisonAssistant
         {
             SelectedUser = string.Empty;
             SelectedTask = string.Empty;
-            ClearSelectedDate();
+            //ClearSelectedDate();
             ClearDateTaskChanged();
         }
 
