@@ -100,7 +100,7 @@ namespace ComparisonAssistant
             {
                 StorageApplicationPermissions.FutureAccessList.AddOrReplace("FullFileNameLog", file);
                 Settings.FullNameFileLogs = file.Path;
-                Bindings.Update();
+                Updateelements();
             }
         }
 
@@ -175,13 +175,13 @@ namespace ComparisonAssistant
         private void MenuFlyoutItemSelectedDateEnd_Click(object sender, RoutedEventArgs e)
         {
             SelectedFilters.SelectedDateEnd = DateTime.Now;
-            Bindings.Update();
+            Updateelements();
         }
 
         private void MenuFlyoutItemSelectedDateStart_Click(object sender, RoutedEventArgs e)
         {
             SelectedFilters.SelectedDateStart = DateTime.Now;
-            Bindings.Update();
+            Updateelements();
         }
 
         private void MenuFlyoutItemGoDayCalendar_Click(object sender, RoutedEventArgs e)
@@ -212,7 +212,7 @@ namespace ComparisonAssistant
                    && SelectedFilters.SelectedCommit == SelectedFilters.SelectedCommit2)
                 {
                     SelectedFilters.SelectedCommit = null;
-                    Bindings.Update();
+                    Updateelements();
                 }
                 SelectedFilters.SelectedCommit2 = SelectedFilters.SelectedCommit;
             }
@@ -240,12 +240,16 @@ namespace ComparisonAssistant
         private async void UpdateDB()
         {
             Settings.LogFileReadingIsComplete = false;
-            Bindings.Update();
+            Updateelements();
+
             NotificationStartUpdateDB();
+
             await UpdateDBAsync();
+
             NotificationEndUpdateDB();
+
             Settings.LogFileReadingIsComplete = true;
-            Bindings.Update();
+            Updateelements();
         }
 
         private async Task UpdateDBAsync()
@@ -299,14 +303,14 @@ namespace ComparisonAssistant
                 {
                     SelectedFilters.SelectedUser = selectedUser;
 
-                    Bindings.Update();
+                    Updateelements();
 
                     if (!string.IsNullOrEmpty(selectedTask))
                         if (!string.IsNullOrEmpty(UserTasks.FirstOrDefault(f => f == selectedTask)))
                         {
                             SelectedFilters.SelectedTask = selectedTask;
 
-                            Bindings.Update();
+                            Updateelements();
                         }
                 }
         }
@@ -364,6 +368,11 @@ namespace ComparisonAssistant
         {
             return date >= SelectedFilters.SelectedDateStart.StartDay()
                 && date <= SelectedFilters.SelectedDateEnd.EndDay();
+        }
+
+        private void Updateelements()
+        {
+            Bindings.Update();
         }
 
         #endregion
