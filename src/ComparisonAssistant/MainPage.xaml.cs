@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
+
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 
@@ -16,6 +17,7 @@ using Windows.Storage;
 using Windows.Storage.AccessCache;
 using Windows.Storage.Pickers;
 using Windows.System;
+
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -37,6 +39,7 @@ namespace ComparisonAssistant
 
         private IEnumerable<IGrouping<string, Models.Commit>> _groupedCommitByUser;
         private Dictionary<string, List<Models.Commit>> _dictionaryUserTasks = new Dictionary<string, List<Models.Commit>>();
+        private ToastNotification _toast;
 
         #endregion
 
@@ -51,7 +54,7 @@ namespace ComparisonAssistant
         {
             base.OnNavigatedTo(e);
 
-            await UpdateDBAsync();
+            UpdateDB();
         }
 
         #endregion
@@ -73,9 +76,9 @@ namespace ComparisonAssistant
 
         #region Buttons
 
-        private async void ButtonUpdateDB_Click(object sender, RoutedEventArgs e)
+        private void ButtonUpdateDB_Click(object sender, RoutedEventArgs e)
         {
-            await UpdateDBAsync();
+            UpdateDB();
         }
 
         private void ButtonUpdateListCommits_Click(object sender, RoutedEventArgs e)
@@ -234,6 +237,17 @@ namespace ComparisonAssistant
 
         #region Other
 
+        private async void UpdateDB()
+        {
+            Settings.LogFileReadingIsComplete = false;
+            Bindings.Update();
+            NotificationStartUpdateDB();
+            await UpdateDBAsync();
+            NotificationEndUpdateDB();
+            Settings.LogFileReadingIsComplete = true;
+            Bindings.Update();
+        }
+
         private async Task UpdateDBAsync()
         {
             string selectedUser = SelectedFilters.SelectedUser;
@@ -249,8 +263,16 @@ namespace ComparisonAssistant
             {
                 List<string> listUsers = new List<string>();
 
+                _toast.ProgressValueDoubleMax = _groupedCommitByUser.Count();
+
                 foreach (IGrouping<string, Models.Commit> itemGroup in _groupedCommitByUser)
                 {
+                    _toast.ProgressValueDouble++;
+
+                    _toast.Update(progressValueString: itemGroup.Key);
+
+                    await Task.Delay(500);
+
                     List<Models.Commit> list = new List<Models.Commit>();
 
                     foreach (Models.Commit item in itemGroup)
@@ -342,6 +364,36 @@ namespace ComparisonAssistant
         {
             return date >= SelectedFilters.SelectedDateStart.StartDay()
                 && date <= SelectedFilters.SelectedDateEnd.EndDay();
+        }
+
+        #endregion
+
+        #region ToastNotification
+
+        private void NotificationStartUpdateDB()
+          => NotificationInitialize("Чтение", "Чтение файла");
+
+        private void NotificationEndUpdateDB()
+            => NotificationInitialize("Завершено", "Файл прочитан", true);
+
+        private void NotificationInitialize(string progressStatus, string text, bool endUpdateDB = false)
+        {
+            _toast = new ToastNotification()
+            {
+                ProgressStatus = progressStatus,
+                Text = text,
+                ProgressValueDouble = 0
+            };
+
+            if (endUpdateDB)
+            {
+                _toast.ProgressValueDouble = 1;
+                _toast.ProgressValueDoubleMax = 1;
+            }
+
+            _toast.InitialToast("Updating-DB", "Updating-DB");
+
+            _toast.Show();
         }
 
         #endregion

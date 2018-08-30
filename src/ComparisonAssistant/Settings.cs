@@ -32,6 +32,7 @@ namespace ComparisonAssistant
                 SetValueLocalSettings(_keyFullNameFileLogs, value);
             }
         }
+        public bool LogFileReadingIsComplete { get; set; }
 
         private void SetValueLocalSettings(string key, object value)
         {
