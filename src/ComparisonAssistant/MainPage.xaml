@@ -57,7 +57,7 @@
                 </StackPanel>
             </Grid>
             <Border Height="5" Margin="3" Background="{ThemeResource AppBarItemPointerOverBackgroundThemeBrush}"/>
-            <Button Content="Прочитать файл логов" Width="300" Click="ButtonUpdateDB_Click"/>
+            <Button Content="Прочитать файл логов" Width="300" Click="ButtonUpdateDB_Click" IsEnabled="{x:Bind Settings.LogFileReadingIsComplete}"/>
             <Border Height="5" Margin="3" Background="{ThemeResource AppBarItemPointerOverBackgroundThemeBrush}"/>
             <TextBlock Text="Фильтры по задачам" Style="{ThemeResource BaseTextBlockStyle}"/>
             <Grid>
@@ -67,16 +67,16 @@
                 </Grid.ColumnDefinitions>
                 <Border Grid.Column="0" Margin="0,0,2,0" Background="{ThemeResource AppBarItemPointerOverBackgroundThemeBrush}"/>
                 <StackPanel Grid.Column="1">
-                    <ComboBox Header="Пользователь" Width="295" ItemsSource="{x:Bind Users}" SelectedItem="{x:Bind SelectedFilters.SelectedUser, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectionChanged="ComboBoxUser_SelectionChanged"/>
+                    <ComboBox Header="Пользователь" Width="295" ItemsSource="{x:Bind Users}" IsEnabled="{x:Bind Settings.LogFileReadingIsComplete}" SelectedItem="{x:Bind SelectedFilters.SelectedUser, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectionChanged="ComboBoxUser_SelectionChanged"/>
                     <Border Height="5"/>
-                    <ComboBox x:Name="ComboBoxTask" Header="Задача" Width="295"  SelectionChanged="ComboBoxTask_SelectionChanged" SelectedItem="{x:Bind SelectedFilters.SelectedTask, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{x:Bind UserTasks}"/>
+                    <ComboBox x:Name="ComboBoxTask" Header="Задача" Width="295" IsEnabled="{x:Bind Settings.LogFileReadingIsComplete}" SelectionChanged="ComboBoxTask_SelectionChanged" SelectedItem="{x:Bind SelectedFilters.SelectedTask, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{x:Bind UserTasks}"/>
                     <Border Height="5"/>
                     <TextBlock Text="Отбор по периоду"/>
-                    <CalendarView x:Name="CalendarViewDateTaskChanged" Width="295" Height="290" SelectionMode="Multiple" FirstDayOfWeek="Monday" SelectedDatesChanged="CalendarViewDateTaskChanged_SelectedDatesChanged"/>
+                    <CalendarView x:Name="CalendarViewDateTaskChanged" Width="295" Height="290" IsEnabled="{x:Bind Settings.LogFileReadingIsComplete}" SelectionMode="Multiple" FirstDayOfWeek="Monday" SelectedDatesChanged="CalendarViewDateTaskChanged_SelectedDatesChanged"/>
                 </StackPanel>
             </Grid>
             <Border Height="5" Margin="3" Background="{ThemeResource AppBarItemPointerOverBackgroundThemeBrush}"/>
-            <Button Content="Обновить список коммитов" Width="300" Click="ButtonUpdateListCommits_Click"/>
+            <Button Content="Обновить список коммитов" Width="300" IsEnabled="{x:Bind Settings.LogFileReadingIsComplete}" Click="ButtonUpdateListCommits_Click"/>
             <Border Height="5" Margin="3" Background="{ThemeResource AppBarItemPointerOverBackgroundThemeBrush}"/>
             <CheckBox Content="Показать имя измененнного файла" Width="300" Checked="ChecboxVisibleFileDetailsFullname_Checked" Unchecked="ChecboxVisibleFileDetailsFullname_Unchecked"/>
         </StackPanel>
