@@ -62,7 +62,8 @@ namespace ComparisonAssistant
                 string fileName;
                 foreach (string row in dataFile)
                 {
-                    bool thisCommit = new Regex(Regex.Escape(_separatorCommit)).Matches(row).Count == 2;
+                    int countSeparators = new Regex(Regex.Escape(_separatorCommit)).Matches(row).Count;
+                    bool thisCommit = countSeparators == 2 || countSeparators == 4;
                     if (thisCommit)
                     {
                         if (lastCommitTasks.Count > 0)
@@ -77,7 +78,7 @@ namespace ComparisonAssistant
                         #region Read commit
                         string[] commitParts = row.Split(new string[] { _separatorCommit }, StringSplitOptions.RemoveEmptyEntries);
 
-                        if (commitParts.Count() == 3)
+                        if (commitParts.Count() == 3 || commitParts.Count() == 5)
                         {
                             DateTime dateCommit;
                             try
@@ -92,15 +93,23 @@ namespace ComparisonAssistant
                             string userName = commitParts[0];
                             string comment = commitParts[1];
 
+                            string commitHashAbbreviated = string.Empty;
+                            string commitHash = string.Empty;
+                            if (commitParts.Count() == 5)
+                            {
+                                commitHashAbbreviated = commitParts[3];
+                                commitHash = commitParts[4];
+                            }
+
                             MatchCollection matches = new Regex(_patternFindTaskName).Matches(comment);
                             if (matches.Count > 0)
                             {
                                 foreach (Match item in matches)
-                                    lastCommitTasks.Add(new Models.Commit(userName, comment, dateCommit, item.Value));
+                                    lastCommitTasks.Add(new Models.Commit(userName, comment, dateCommit, item.Value, commitHashAbbreviated, commitHash));
                             }
                             else
                             {
-                                lastCommitTasks.Add(new Models.Commit(userName, comment, dateCommit, "---"));
+                                lastCommitTasks.Add(new Models.Commit(userName, comment, dateCommit, "---", commitHashAbbreviated, commitHash));
                             }
                         }
                         #endregion

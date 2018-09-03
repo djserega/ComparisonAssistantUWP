@@ -79,6 +79,7 @@
             <Button Content="Обновить список коммитов" Width="300" IsEnabled="{x:Bind Settings.LogFileReadingIsComplete}" Click="ButtonUpdateListCommits_Click"/>
             <Border Height="5" Margin="3" Background="{ThemeResource AppBarItemPointerOverBackgroundThemeBrush}"/>
             <CheckBox Content="Показать имя измененнного файла" Width="300" Checked="ChecboxVisibleFileDetailsFullname_Checked" Unchecked="ChecboxVisibleFileDetailsFullname_Unchecked"/>
+            <TextBox Header="Префикс страницы коммита" Width="295" Text="{x:Bind Settings.PrefixSiteCommits, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
         </StackPanel>
 
         <Border Grid.Column="2" Grid.Row="1" Margin="3" Background="{ThemeResource AppBarItemPointerOverBackgroundThemeBrush}"/>
@@ -88,10 +89,13 @@
                 <toolControls:DataGrid.Columns>
                     <toolControls:DataGridTextColumn Header="Дата" Binding="{Binding Date}" Width="160"/>
                     <toolControls:DataGridTextColumn Header="Комментарий" Binding="{Binding Comment}" Width="*"/>
+                    <toolControls:DataGridTextColumn Header="Хеш" Binding="{Binding CommitHashAbbreviated}" Width="100"/>
                 </toolControls:DataGrid.Columns>
          
                 <toolControls:DataGrid.ContextFlyout>
                     <MenuFlyout>
+                        <MenuFlyoutItem Text="Открыть страницу коммита в браузере" Click="MenuFlyoutItemOpenSiteCommit_Click"/>
+                        <MenuFlyoutSeparator/>
                         <MenuFlyoutItem Text="Перейти к дню в календаре" Click="MenuFlyoutItemGoDayCalendar_Click"/>
                         <MenuFlyoutItem Text="Исключить день" Click="MenuFlyoutItemOffDayCalendar_Click"/>
                     </MenuFlyout>

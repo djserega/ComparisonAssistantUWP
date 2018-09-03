@@ -184,6 +184,16 @@ namespace ComparisonAssistant
             Updateelements();
         }
 
+        private async void MenuFlyoutItemOpenSiteCommit_Click(object sender, RoutedEventArgs e)
+        {
+            if (SelectedFilters.SelectedCommit != null)
+            {
+                if (!string.IsNullOrWhiteSpace(Settings.PrefixSiteCommits)
+                    && !string.IsNullOrWhiteSpace(SelectedFilters.SelectedCommit.CommitHash))
+                    await Launcher.LaunchUriAsync(new Uri(Settings.PrefixSiteCommits + SelectedFilters.SelectedCommit.CommitHash));
+            }
+        }
+
         private void MenuFlyoutItemGoDayCalendar_Click(object sender, RoutedEventArgs e)
         {
             if (SelectedFilters.SelectedCommit != null)
@@ -406,6 +416,5 @@ namespace ComparisonAssistant
         }
 
         #endregion
-
     }
 }
