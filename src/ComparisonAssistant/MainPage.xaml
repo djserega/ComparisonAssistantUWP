@@ -16,7 +16,7 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="10"/>
-            <ColumnDefinition Width="300"/>
+            <ColumnDefinition Width="315"/>
             <ColumnDefinition Width="10"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="10"/>
@@ -30,7 +30,7 @@
         </Grid.RowDefinitions>
 
         <ScrollViewer Grid.Column="1" Grid.Row="1">
-            <StackPanel Margin="0,0,5,0">
+            <StackPanel Margin="0,0,10,0">
                 <Border Height="5"/>
                 <TextBlock Text="Фильтры по дате" Style="{ThemeResource BaseTextBlockStyle}"/>
                 <Grid>
@@ -120,8 +120,15 @@
                                                 <ColumnDefinition Width="auto"/> <!--6-->
                                                 <ColumnDefinition Width="*"/> <!--7-->
                                             </Grid.ColumnDefinitions>
-                                     
-                                            <TextBlock Grid.Column="1" Text="{Binding Name}" VerticalAlignment="Center"/>
+
+                                            <TextBlock Grid.Column="1" Text="{Binding Name}" VerticalAlignment="Center">
+                                                <TextBlock.ContextFlyout>
+                                                    <MenuFlyout>
+                                                        <MenuFlyoutItem Text="Скопировать имя и тип объекта" Click="MenuFlyoutItemCopyTypeObjectAndObjectNameToClipboard_Click"/>
+                                                        <MenuFlyoutItem Text="Скопировать имя объекта" Click="MenuFlyoutItemCopyObjectNameToClipboard_Click"/>
+                                                    </MenuFlyout>
+                                                </TextBlock.ContextFlyout>
+                                            </TextBlock>
                                             <RadioButton Grid.Column="3" Content="М" IsChecked="{Binding IsModule}" IsEnabled="False"/>
                                             <RadioButton Grid.Column="4" Content="ММ" IsChecked="{Binding IsModuleManager}" IsEnabled="False"/>
                                             <RadioButton Grid.Column="5" Content="Ф" IsChecked="{Binding IsForm}" IsEnabled="False"/>

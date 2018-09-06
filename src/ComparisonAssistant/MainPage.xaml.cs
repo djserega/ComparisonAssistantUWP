@@ -9,7 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
-
+using Windows.ApplicationModel.DataTransfer;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 
@@ -416,5 +416,36 @@ namespace ComparisonAssistant
         }
 
         #endregion
+
+        private void MenuFlyoutItemCopyObjectNameToClipboard_Click(object sender, RoutedEventArgs e)
+        {
+            Models.File fileObject = GetFileObjectFromRoutedEventArgs(e);
+            if (fileObject != null)
+                SetTextToClipboard(fileObject.ObjectName);
+        }
+
+        private void MenuFlyoutItemCopyTypeObjectAndObjectNameToClipboard_Click(object sender, RoutedEventArgs e)
+        {
+            Models.File fileObject = GetFileObjectFromRoutedEventArgs(e);
+            if (fileObject != null)
+                SetTextToClipboard($"{fileObject.TypeObjectName}.{fileObject.ObjectName}");
+        }
+
+        private void SetTextToClipboard(string text)
+        {
+            DataPackage dataPackage = new DataPackage();
+            dataPackage.SetText(text);
+
+            Clipboard.SetContent(dataPackage);
+        }
+
+        private Models.File GetFileObjectFromRoutedEventArgs(RoutedEventArgs e)
+        {
+            if (e.OriginalSource is MenuFlyoutItem menuItem)
+                if (menuItem.DataContext is Models.File fileObject)
+                    return fileObject;
+            return null;
+        }
+
     }
 }
