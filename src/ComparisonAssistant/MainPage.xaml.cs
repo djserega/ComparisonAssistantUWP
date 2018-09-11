@@ -50,7 +50,7 @@ namespace ComparisonAssistant
             InitializeComponent();
         }
 
-        protected async override void OnNavigatedTo(NavigationEventArgs e)
+        protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
 
@@ -382,7 +382,15 @@ namespace ComparisonAssistant
 
         private void Updateelements()
         {
-            Bindings.Update();
+            try
+            {
+                Bindings.Update();
+
+            }
+            catch (Exception ex)
+            {
+                Dialogs.Show("Ошибка обновления данных.\n" + ex.Message);
+            }
         }
 
         #endregion

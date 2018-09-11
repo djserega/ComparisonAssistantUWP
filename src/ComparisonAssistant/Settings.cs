@@ -14,40 +14,38 @@ namespace ComparisonAssistant
         private ApplicationDataContainer _localSettings = ApplicationData.Current.LocalSettings;
         private readonly string _keyFullNameFileLogs = "FullNameFileLogs";
         private readonly string _keyPrefixSiteCommits = "PrefixSiteCommits";
+        private readonly string _keySelectedFilterPeriods = "SelectedFilterPeriods";
 
         public Settings()
         {
-            if (!_localSettings.Values.ContainsKey(_keyFullNameFileLogs))
-                SetValueLocalSettings(_keyFullNameFileLogs, string.Empty);
-            if (!_localSettings.Values.ContainsKey(_keyPrefixSiteCommits))
-                SetValueLocalSettings(_keyPrefixSiteCommits, string.Empty);
+            SetDefaultValue(_keyFullNameFileLogs);
+            SetDefaultValue(_keyPrefixSiteCommits);
+            SetDefaultValue(_keySelectedFilterPeriods);
+        }
+
+        private void SetDefaultValue(string key)
+        {
+            if (!_localSettings.Values.ContainsKey(key))
+                SetValueLocalSettings(key, string.Empty);
         }
 
         public string FullNameFileLogs
         {
-            get
-            {
-                object value = GetValueLocalSettings(_keyFullNameFileLogs);
-                return value == null ? string.Empty : (string)value;
-            }
-            set
-            {
-                SetValueLocalSettings(_keyFullNameFileLogs, value);
-            }
+            get => (string)GetValueLocalSettings(_keyFullNameFileLogs);
+            set => SetValueLocalSettings(_keyFullNameFileLogs, value);
         }
         public bool LogFileReadingIsComplete { get; set; }
         public string PrefixSiteCommits
         {
-            get
-            {
-                object value = GetValueLocalSettings(_keyPrefixSiteCommits);
-                return value == null ? string.Empty : (string)value;
-            }
-            set
-            {
-                SetValueLocalSettings(_keyPrefixSiteCommits, value);
-            }
+            get => (string)GetValueLocalSettings(_keyPrefixSiteCommits);
+            set => SetValueLocalSettings(_keyPrefixSiteCommits, value);
         }
+        public string SelectedFilterPeriods
+        {
+            get => (string)GetValueLocalSettings(_keySelectedFilterPeriods);
+            set => SetValueLocalSettings(_keySelectedFilterPeriods, value);
+        }
+
 
         private void SetValueLocalSettings(string key, object value)
         {

@@ -40,6 +40,7 @@
                     </Grid.ColumnDefinitions>
                     <Border Grid.Column="0" Margin="0,0,2,0" Background="{ThemeResource AppBarItemPointerOverBackgroundThemeBrush}"/>
                     <StackPanel Grid.Column="1" Orientation="Vertical">
+                        <ComboBox Header="Период" Width="290" ItemsSource="{x:Bind SelectedFilters.FilterPeriods}" SelectedItem="{x:Bind SelectedFilters.SelectedPeriod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                         <CalendarDatePicker Header="Начало периода" DateFormat="{}{day.integer(2)}.{month.integer(2)}.{year.full}" PlaceholderText="" Width="290" Date="{x:Bind SelectedFilters.SelectedDateStart, Mode=TwoWay, Converter={StaticResource TimeConverter}}" DateChanged="CalendarDatePickerDateStart_DateChanged">
                             <CalendarDatePicker.ContextFlyout>
                                 <MenuFlyout>
@@ -58,7 +59,7 @@
                     </StackPanel>
                 </Grid>
                 <Border Height="5" Margin="3" Background="{ThemeResource AppBarItemPointerOverBackgroundThemeBrush}"/>
-                <Button Content="Прочитать файл логов" Width="295" Click="ButtonUpdateDB_Click" IsEnabled="{x:Bind Settings.LogFileReadingIsComplete}"/>
+                <Button Content="Прочитать файл логов" Width="305" Click="ButtonUpdateDB_Click" IsEnabled="{x:Bind Settings.LogFileReadingIsComplete}"/>
                 <Border Height="5" Margin="3" Background="{ThemeResource AppBarItemPointerOverBackgroundThemeBrush}"/>
                 <TextBlock Text="Фильтры по задачам" Style="{ThemeResource BaseTextBlockStyle}"/>
                 <Grid>
@@ -77,7 +78,7 @@
                     </StackPanel>
                 </Grid>
                 <Border Height="5" Margin="3" Background="{ThemeResource AppBarItemPointerOverBackgroundThemeBrush}"/>
-                <Button Content="Обновить список коммитов" Width="295" IsEnabled="{x:Bind Settings.LogFileReadingIsComplete}" Click="ButtonUpdateListCommits_Click"/>
+                <Button Content="Обновить список коммитов" Width="305" IsEnabled="{x:Bind Settings.LogFileReadingIsComplete}" Click="ButtonUpdateListCommits_Click"/>
                 <Border Height="5" Margin="3" Background="{ThemeResource AppBarItemPointerOverBackgroundThemeBrush}"/>
                 <CheckBox Content="Показать имя измененнного файла" Width="290" Checked="ChecboxVisibleFileDetailsFullname_Checked" Unchecked="ChecboxVisibleFileDetailsFullname_Unchecked"/>
                 <TextBox Header="Префикс страницы коммита" Width="290" Text="{x:Bind Settings.PrefixSiteCommits, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
