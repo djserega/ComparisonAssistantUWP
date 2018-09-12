@@ -8,10 +8,18 @@ namespace ComparisonAssistant
 {
     public class SelectedFilters : NotifyPropertyChangedClass
     {
+        private static UpdateElementsEvents _updateElementsEvents;
+
         private static readonly List<Models.FilterPeriod> _staticFilterPeriods = new Models.FilterPeriods().Periods;
         private static Models.FilterPeriod _selectedPeriod = _staticFilterPeriods[0];
 
         public List<Models.FilterPeriod> FilterPeriods = _staticFilterPeriods;
+
+        public SelectedFilters(UpdateElementsEvents updateElementsEvents)
+        {
+            _updateElementsEvents = updateElementsEvents;
+
+        }
 
         public string SelectedUser { get; set; } = string.Empty;
         public string SelectedTask { get; set; } = string.Empty;
@@ -47,6 +55,8 @@ namespace ComparisonAssistant
         {
             SelectedDateStart = _selectedPeriod.DateStart;
             SelectedDateEnd = _selectedPeriod.DateEnd;
+
+            _updateElementsEvents.EvokeUpdating();
         }
     }
 }

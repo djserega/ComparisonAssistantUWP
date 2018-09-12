@@ -35,6 +35,12 @@ namespace ComparisonAssistant
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        #region Private events
+
+        private static UpdateElementsEvents _updateElementsEvents = new UpdateElementsEvents();
+
+        #endregion
+
         #region Private fields
 
         private IEnumerable<IGrouping<string, Models.Commit>> _groupedCommitByUser;
@@ -48,13 +54,20 @@ namespace ComparisonAssistant
         public MainPage()
         {
             InitializeComponent();
+
+            _updateElementsEvents.UpdateElementsEvent += _updateElementsEvents_UpdateElementsEvent;
+        }
+
+        private void _updateElementsEvents_UpdateElementsEvent()
+        {
+            UpdateFormElements();
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
 
-            UpdateDB();
+            UpdateDB(true);
         }
 
         #endregion
@@ -62,7 +75,7 @@ namespace ComparisonAssistant
         #region Internal properties
 
         internal Settings Settings { get; set; } = new Settings();
-        internal SelectedFilters SelectedFilters { get; set; } = new SelectedFilters();
+        internal SelectedFilters SelectedFilters { get; set; } = new SelectedFilters(_updateElementsEvents);
 
         #endregion
 
@@ -100,7 +113,7 @@ namespace ComparisonAssistant
             {
                 StorageApplicationPermissions.FutureAccessList.AddOrReplace("FullFileNameLog", file);
                 Settings.FullNameFileLogs = file.Path;
-                Updateelements();
+                UpdateFormElements();
             }
         }
 
@@ -175,13 +188,13 @@ namespace ComparisonAssistant
         private void MenuFlyoutItemSelectedDateEnd_Click(object sender, RoutedEventArgs e)
         {
             SelectedFilters.SelectedDateEnd = DateTime.Now;
-            Updateelements();
+            UpdateFormElements();
         }
 
         private void MenuFlyoutItemSelectedDateStart_Click(object sender, RoutedEventArgs e)
         {
             SelectedFilters.SelectedDateStart = DateTime.Now;
-            Updateelements();
+            UpdateFormElements();
         }
 
         private async void MenuFlyoutItemOpenSiteCommit_Click(object sender, RoutedEventArgs e)
@@ -222,7 +235,7 @@ namespace ComparisonAssistant
                    && SelectedFilters.SelectedCommit == SelectedFilters.SelectedCommit2)
                 {
                     SelectedFilters.SelectedCommit = null;
-                    Updateelements();
+                    UpdateFormElements();
                 }
                 SelectedFilters.SelectedCommit2 = SelectedFilters.SelectedCommit;
             }
@@ -247,10 +260,12 @@ namespace ComparisonAssistant
 
         #region Other
 
-        private async void UpdateDB()
+        private async void UpdateDB(bool onNavigatedTo = false)
         {
             Settings.LogFileReadingIsComplete = false;
-            Updateelements();
+
+            if (!onNavigatedTo)
+                UpdateFormElements();
 
             NotificationStartUpdateDB();
 
@@ -259,7 +274,7 @@ namespace ComparisonAssistant
             NotificationEndUpdateDB();
 
             Settings.LogFileReadingIsComplete = true;
-            Updateelements();
+            UpdateFormElements();
         }
 
         private async Task UpdateDBAsync()
@@ -313,14 +328,14 @@ namespace ComparisonAssistant
                 {
                     SelectedFilters.SelectedUser = selectedUser;
 
-                    Updateelements();
+                    UpdateFormElements();
 
                     if (!string.IsNullOrEmpty(selectedTask))
                         if (!string.IsNullOrEmpty(UserTasks.FirstOrDefault(f => f == selectedTask)))
                         {
                             SelectedFilters.SelectedTask = selectedTask;
 
-                            Updateelements();
+                            UpdateFormElements();
                         }
                 }
         }
@@ -380,12 +395,13 @@ namespace ComparisonAssistant
                 && date <= SelectedFilters.SelectedDateEnd.EndDay();
         }
 
-        private void Updateelements()
+        private void UpdateFormElements()
         {
             try
             {
+                _updateElementsEvents.Updating = true;     
                 Bindings.Update();
-
+                _updateElementsEvents.Updating = false;
             }
             catch (Exception ex)
             {

@@ -55,6 +55,15 @@ namespace ComparisonAssistant
                 _localSettings.Values.Add(key, value);
         }
         private object GetValueLocalSettings(string key)
-            => (_localSettings.Values.ContainsKey(key)) ? _localSettings.Values[key] : null;
+        {
+            try
+            {
+                return (_localSettings.Values.ContainsKey(key)) ? _localSettings.Values[key] : null;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
     }
 }
