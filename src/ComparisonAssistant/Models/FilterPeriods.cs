@@ -36,11 +36,13 @@ namespace ComparisonAssistant.Models
             Description = description;
             DateStart = dateStart ?? DateTime.MinValue;
             DateEnd = dateEnd ?? DateTime.Now.Date.EndDay();
+            AnyPeriod = dateStart == null && dateEnd == null;
         }
 
         public string Description { get; set; }
         public DateTime DateStart { get; set; }
         public DateTime DateEnd { get; set; }
+        public bool AnyPeriod { get; set; }
 
         public override string ToString()
         {

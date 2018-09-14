@@ -53,8 +53,11 @@ namespace ComparisonAssistant
 
         private void ChangeSelectedDate()
         {
-            SelectedDateStart = _selectedPeriod.DateStart;
-            SelectedDateEnd = _selectedPeriod.DateEnd;
+            if (!SelectedPeriod.AnyPeriod)
+            {
+                SelectedDateStart = _selectedPeriod.DateStart;
+                SelectedDateEnd = _selectedPeriod.DateEnd;
+            }
 
             _updateElementsEvents.EvokeUpdating();
         }
