@@ -12,6 +12,8 @@ namespace ComparisonAssistant
 
         private static readonly List<Models.FilterPeriod> _staticFilterPeriods = new Models.FilterPeriods().Periods;
         private static Models.FilterPeriod _selectedPeriod = _staticFilterPeriods[0];
+        private DateTime _selectedDateStart = DateTime.MinValue;
+        private DateTime _selectedDateEnd = DateTime.MaxValue;
 
         public List<Models.FilterPeriod> FilterPeriods = _staticFilterPeriods;
 
@@ -24,8 +26,8 @@ namespace ComparisonAssistant
         public string SelectedUser { get; set; } = string.Empty;
         public string SelectedTask { get; set; } = string.Empty;
         public Models.FilterPeriod SelectedPeriod { get => _selectedPeriod; set { _selectedPeriod = value; ChangeSelectedDate(); } } 
-        public DateTime SelectedDateStart { get; set; } = DateTime.MinValue;
-        public DateTime SelectedDateEnd { get; set; } = DateTime.MaxValue;
+        public DateTime SelectedDateStart { get => _selectedDateStart; set { _selectedDateStart = value; SetFilterAnyPeriod(); } } 
+        public DateTime SelectedDateEnd { get => _selectedDateEnd; set { _selectedDateEnd = value; SetFilterAnyPeriod(); } }
         public DateTime DateTaskChangedMin { get; set; } = DateTime.MinValue;
         public DateTime DateTaskChangedMax { get; set; } = DateTime.MaxValue;
         public Models.Commit SelectedCommit { get; set; }
@@ -61,5 +63,12 @@ namespace ComparisonAssistant
 
             _updateElementsEvents.EvokeUpdating();
         }
+
+        private void SetFilterAnyPeriod()
+        {
+            _selectedPeriod = _staticFilterPeriods.First(f => f.AnyPeriod);
+            _updateElementsEvents.EvokeUpdating();
+        }
+
     }
 }
