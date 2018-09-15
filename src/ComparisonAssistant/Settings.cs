@@ -65,10 +65,8 @@ namespace ComparisonAssistant
                 }
             }
         }
-        public Visibility VisibilityFilterPanel
-        {
-            get => StageFilterPanel == StageFilterPanel.Open ? Visibility.Visible : Visibility.Collapsed;
-        }
+        public Visibility VisibilityFilterPanel { get => StageFilterPanel == StageFilterPanel.Open ? Visibility.Visible : Visibility.Collapsed; }
+        public Visibility VisibilityFilterPanelCompact { get => StageFilterPanel != StageFilterPanel.Open ? Visibility.Visible : Visibility.Collapsed; }
 
         private void SetValueLocalSettings(string key, object value)
         {
