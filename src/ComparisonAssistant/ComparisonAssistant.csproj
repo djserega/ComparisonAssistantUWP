@@ -105,6 +105,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Dialogs.cs" />
+    <Compile Include="Enums.cs" />
     <Compile Include="Events.cs" />
     <Compile Include="Models\FilterPeriods.cs" />
     <Compile Include="Settings.cs" />

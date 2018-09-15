@@ -471,5 +471,12 @@ namespace ComparisonAssistant
             return null;
         }
 
+        private void ButtonFilter_Click(object sender, RoutedEventArgs e)
+        {
+            Settings.StageFilterPanel = Settings.StageFilterPanel == StageFilterPanel.Open
+                ? StageFilterPanel.Minimize : StageFilterPanel.Open;
+
+            UpdateFormElements();
+        }
     }
 }

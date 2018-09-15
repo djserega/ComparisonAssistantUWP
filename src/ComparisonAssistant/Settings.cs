@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using Windows.Storage;
+using Windows.UI.Xaml;
 
 namespace ComparisonAssistant
 {
@@ -46,6 +47,28 @@ namespace ComparisonAssistant
             set => SetValueLocalSettings(_keySelectedFilterPeriods, value);
         }
 
+        public StageFilterPanel StageFilterPanel { get; set; } = StageFilterPanel.Open;
+        public GridLength WidthFilterPanel
+        {
+            get
+            {
+                switch (StageFilterPanel)
+                {
+                    case StageFilterPanel.Open:
+                        return new GridLength(315);
+                    case StageFilterPanel.Minimize:
+                        return new GridLength(40);
+                    case StageFilterPanel.Close:
+                        return new GridLength(0);
+                    default:
+                        return new GridLength(315);
+                }
+            }
+        }
+        public Visibility VisibilityFilterPanel
+        {
+            get => StageFilterPanel == StageFilterPanel.Open ? Visibility.Visible : Visibility.Collapsed;
+        }
 
         private void SetValueLocalSettings(string key, object value)
         {
