@@ -13,6 +13,6 @@ namespace ComparisonAssistant
             => new DateTimeOffset(((DateTime)value).ToUniversalTime());
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)
-            => ((DateTimeOffset)value).DateTime;
+            => value == null ? new object() : ((DateTimeOffset)value).DateTime;
     }
 }
