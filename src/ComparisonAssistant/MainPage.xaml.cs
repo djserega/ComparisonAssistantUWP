@@ -55,12 +55,7 @@ namespace ComparisonAssistant
         {
             InitializeComponent();
 
-            _updateElementsEvents.UpdateElementsEvent += _updateElementsEvents_UpdateElementsEvent;
-        }
-
-        private void _updateElementsEvents_UpdateElementsEvent()
-        {
-            UpdateFormElements();
+            _updateElementsEvents.UpdateElementsEvent += () => { UpdateFormElements(); };
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)

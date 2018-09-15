@@ -27,16 +27,77 @@
             <RowDefinition Height="10"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="5"/>
-            <RowDefinition Height="60"/>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="5"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Column ="1" Grid.Row="1">
-            <Button Click="ButtonFilter_Click">
+        <Grid Grid.Column ="1" Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Button Grid.Row="0" Click="ButtonFilter_Click">
                 <SymbolIcon Symbol="Filter"/>
             </Button>
-            
-            <ScrollViewer Visibility="{x:Bind Settings.VisibilityFilterPanelCompact}">
+
+<ScrollViewer Grid.Row="1" Visibility="{x:Bind Settings.VisibilityFilterPanel}">
+                <StackPanel Orientation="Vertical" Margin="0,0,10,0">
+                    <Border Height="5"/>
+                    <TextBlock Text="Фильтры по дате" Style="{ThemeResource BaseTextBlockStyle}"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="5"/>
+                            <ColumnDefinition Width="295"/>
+                        </Grid.ColumnDefinitions>
+                        <Border Grid.Column="0" Margin="0,0,2,0" Background="{ThemeResource AppBarItemPointerOverBackgroundThemeBrush}"/>
+                        <StackPanel Grid.Column="1" Orientation="Vertical">
+                            <ComboBox Header="Период" Width="290" ItemsSource="{x:Bind SelectedFilters.FilterPeriods}" SelectedItem="{x:Bind SelectedFilters.SelectedPeriod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <CalendarDatePicker Header="Начало периода" DateFormat="{}{day.integer(2)}.{month.integer(2)}.{year.full}" PlaceholderText="" Width="290" Date="{x:Bind SelectedFilters.SelectedDateStart, Mode=TwoWay, Converter={StaticResource TimeConverter}}" DateChanged="CalendarDatePickerDateStart_DateChanged">
+                                <CalendarDatePicker.ContextFlyout>
+                                    <MenuFlyout>
+                                        <MenuFlyoutItem Text="Сегодня" Click="MenuFlyoutItemSelectedDateStart_Click"/>
+                                    </MenuFlyout>
+                                </CalendarDatePicker.ContextFlyout>
+                            </CalendarDatePicker>
+                            <Border Height="5"/>
+                            <CalendarDatePicker Header="Конец периода" DateFormat="{}{day.integer(2)}.{month.integer(2)}.{year.full}" PlaceholderText="" Width="290" Date="{x:Bind SelectedFilters.SelectedDateEnd, Mode=TwoWay, Converter={StaticResource TimeConverter}}" DateChanged="CalendarDatePickerDateEnd_DateChanged">
+                                <CalendarDatePicker.ContextFlyout>
+                                    <MenuFlyout>
+                                        <MenuFlyoutItem Text="Сегодня" Click="MenuFlyoutItemSelectedDateEnd_Click"/>
+                                    </MenuFlyout>
+                                </CalendarDatePicker.ContextFlyout>
+                            </CalendarDatePicker>
+                        </StackPanel>
+                    </Grid>
+                    <Border Height="5" Margin="3" Background="{ThemeResource AppBarItemPointerOverBackgroundThemeBrush}"/>
+                    <Button Content="Прочитать файл логов" Width="305" Click="ButtonUpdateDB_Click" IsEnabled="{x:Bind Settings.LogFileReadingIsComplete}"/>
+                    <Border Height="5" Margin="3" Background="{ThemeResource AppBarItemPointerOverBackgroundThemeBrush}"/>
+                    <TextBlock Text="Фильтры по задачам" Style="{ThemeResource BaseTextBlockStyle}"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="5"/>
+                            <ColumnDefinition Width="295"/>
+                        </Grid.ColumnDefinitions>
+                        <Border Grid.Column="0" Margin="0,0,2,0" Background="{ThemeResource AppBarItemPointerOverBackgroundThemeBrush}"/>
+                        <StackPanel Grid.Column="1">
+                            <ComboBox Header="Пользователь" Width="290" ItemsSource="{x:Bind Users}" IsEnabled="{x:Bind Settings.LogFileReadingIsComplete}" SelectedItem="{x:Bind SelectedFilters.SelectedUser, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectionChanged="ComboBoxUser_SelectionChanged"/>
+                            <Border Height="5"/>
+                            <ComboBox Header="Задача" Width="290" IsEnabled="{x:Bind Settings.LogFileReadingIsComplete}" SelectionChanged="ComboBoxTask_SelectionChanged" SelectedItem="{x:Bind SelectedFilters.SelectedTask, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{x:Bind UserTasks}"/>
+                            <Border Height="5"/>
+                            <TextBlock Text="Отбор по периоду"/>
+                            <CalendarView x:Name="CalendarViewDateTaskChanged" Width="290" Height="290" IsEnabled="{x:Bind Settings.LogFileReadingIsComplete}" SelectionMode="Multiple" FirstDayOfWeek="Monday" SelectedDatesChanged="CalendarViewDateTaskChanged_SelectedDatesChanged"/>
+                        </StackPanel>
+                    </Grid>
+                    <Border Height="5" Margin="3" Background="{ThemeResource AppBarItemPointerOverBackgroundThemeBrush}"/>
+                    <Button Content="Обновить список коммитов" Width="305" IsEnabled="{x:Bind Settings.LogFileReadingIsComplete}" Click="ButtonUpdateListCommits_Click"/>
+                    <Border Height="5" Margin="3" Background="{ThemeResource AppBarItemPointerOverBackgroundThemeBrush}"/>
+                    <CheckBox Content="Показать имя измененнного файла" Width="290" Checked="ChecboxVisibleFileDetailsFullname_Checked" Unchecked="ChecboxVisibleFileDetailsFullname_Unchecked"/>
+                    <TextBox Header="Префикс страницы коммита" Width="290" Text="{x:Bind Settings.PrefixSiteCommits, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+            </ScrollViewer>
+
+            <StackPanel Grid.Row="1" Visibility="{x:Bind Settings.VisibilityFilterPanelCompact}">
                 <StackPanel Orientation="Vertical">
                     <TextBlock Text="{x:Bind SelectedFilters.SelectedTask}" Width="70" Margin="0,70,-40,0">
                         <TextBlock.RenderTransform>
@@ -51,65 +112,9 @@
                     </TextBlock>
 
                 </StackPanel>
-            </ScrollViewer>
-            <ScrollViewer Visibility="{x:Bind Settings.VisibilityFilterPanel}" >
-                <StackPanel Margin="0,0,10,0">
-                    <StackPanel Orientation="Vertical">
-                        <Border Height="5"/>
-                        <TextBlock Text="Фильтры по дате" Style="{ThemeResource BaseTextBlockStyle}"/>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="5"/>
-                                <ColumnDefinition Width="295"/>
-                            </Grid.ColumnDefinitions>
-                            <Border Grid.Column="0" Margin="0,0,2,0" Background="{ThemeResource AppBarItemPointerOverBackgroundThemeBrush}"/>
-                            <StackPanel Grid.Column="1" Orientation="Vertical">
-                                <ComboBox Header="Период" Width="290" ItemsSource="{x:Bind SelectedFilters.FilterPeriods}" SelectedItem="{x:Bind SelectedFilters.SelectedPeriod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                                <CalendarDatePicker Header="Начало периода" DateFormat="{}{day.integer(2)}.{month.integer(2)}.{year.full}" PlaceholderText="" Width="290" Date="{x:Bind SelectedFilters.SelectedDateStart, Mode=TwoWay, Converter={StaticResource TimeConverter}}" DateChanged="CalendarDatePickerDateStart_DateChanged">
-                                    <CalendarDatePicker.ContextFlyout>
-                                        <MenuFlyout>
-                                            <MenuFlyoutItem Text="Сегодня" Click="MenuFlyoutItemSelectedDateStart_Click"/>
-                                        </MenuFlyout>
-                                    </CalendarDatePicker.ContextFlyout>
-                                </CalendarDatePicker>
-                                <Border Height="5"/>
-                                <CalendarDatePicker Header="Конец периода" DateFormat="{}{day.integer(2)}.{month.integer(2)}.{year.full}" PlaceholderText="" Width="290" Date="{x:Bind SelectedFilters.SelectedDateEnd, Mode=TwoWay, Converter={StaticResource TimeConverter}}" DateChanged="CalendarDatePickerDateEnd_DateChanged">
-                                    <CalendarDatePicker.ContextFlyout>
-                                        <MenuFlyout>
-                                            <MenuFlyoutItem Text="Сегодня" Click="MenuFlyoutItemSelectedDateEnd_Click"/>
-                                        </MenuFlyout>
-                                    </CalendarDatePicker.ContextFlyout>
-                                </CalendarDatePicker>
-                            </StackPanel>
-                        </Grid>
-                        <Border Height="5" Margin="3" Background="{ThemeResource AppBarItemPointerOverBackgroundThemeBrush}"/>
-                        <Button Content="Прочитать файл логов" Width="305" Click="ButtonUpdateDB_Click" IsEnabled="{x:Bind Settings.LogFileReadingIsComplete}"/>
-                        <Border Height="5" Margin="3" Background="{ThemeResource AppBarItemPointerOverBackgroundThemeBrush}"/>
-                        <TextBlock Text="Фильтры по задачам" Style="{ThemeResource BaseTextBlockStyle}"/>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="5"/>
-                                <ColumnDefinition Width="295"/>
-                            </Grid.ColumnDefinitions>
-                            <Border Grid.Column="0" Margin="0,0,2,0" Background="{ThemeResource AppBarItemPointerOverBackgroundThemeBrush}"/>
-                            <StackPanel Grid.Column="1">
-                                <ComboBox Header="Пользователь" Width="290" ItemsSource="{x:Bind Users}" IsEnabled="{x:Bind Settings.LogFileReadingIsComplete}" SelectedItem="{x:Bind SelectedFilters.SelectedUser, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectionChanged="ComboBoxUser_SelectionChanged"/>
-                                <Border Height="5"/>
-                                <ComboBox Header="Задача" Width="290" IsEnabled="{x:Bind Settings.LogFileReadingIsComplete}" SelectionChanged="ComboBoxTask_SelectionChanged" SelectedItem="{x:Bind SelectedFilters.SelectedTask, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{x:Bind UserTasks}"/>
-                                <Border Height="5"/>
-                                <TextBlock Text="Отбор по периоду"/>
-                                <CalendarView x:Name="CalendarViewDateTaskChanged" Width="290" Height="290" IsEnabled="{x:Bind Settings.LogFileReadingIsComplete}" SelectionMode="Multiple" FirstDayOfWeek="Monday" SelectedDatesChanged="CalendarViewDateTaskChanged_SelectedDatesChanged"/>
-                            </StackPanel>
-                        </Grid>
-                        <Border Height="5" Margin="3" Background="{ThemeResource AppBarItemPointerOverBackgroundThemeBrush}"/>
-                        <Button Content="Обновить список коммитов" Width="305" IsEnabled="{x:Bind Settings.LogFileReadingIsComplete}" Click="ButtonUpdateListCommits_Click"/>
-                        <Border Height="5" Margin="3" Background="{ThemeResource AppBarItemPointerOverBackgroundThemeBrush}"/>
-                        <CheckBox Content="Показать имя измененнного файла" Width="290" Checked="ChecboxVisibleFileDetailsFullname_Checked" Unchecked="ChecboxVisibleFileDetailsFullname_Unchecked"/>
-                        <TextBox Header="Префикс страницы коммита" Width="290" Text="{x:Bind Settings.PrefixSiteCommits, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                    </StackPanel>
-                </StackPanel>
-            </ScrollViewer>
-        </StackPanel>
+            </StackPanel>
+        
+        </Grid>
         <Border Grid.Column="2" Grid.Row="1" Margin="3" Background="{ThemeResource AppBarItemPointerOverBackgroundThemeBrush}"/>
 
         <Grid Grid.Column="3" Grid.Row="1">
@@ -119,7 +124,7 @@
                     <toolControls:DataGridTextColumn Header="Комментарий" Binding="{Binding Comment}" Width="*"/>
                     <toolControls:DataGridTextColumn Header="Хеш" Binding="{Binding CommitHashAbbreviated}" Width="100"/>
                 </toolControls:DataGrid.Columns>
-         
+
                 <toolControls:DataGrid.ContextFlyout>
                     <MenuFlyout>
                         <MenuFlyoutItem Text="Открыть страницу коммита в браузере" Click="MenuFlyoutItemOpenSiteCommit_Click"/>
@@ -128,7 +133,7 @@
                         <MenuFlyoutItem Text="Исключить день" Click="MenuFlyoutItemOffDayCalendar_Click"/>
                     </MenuFlyout>
                 </toolControls:DataGrid.ContextFlyout>
-                
+
                 <toolControls:DataGrid.ItemDetailsTemplate>
                     <DataTemplate>
                         <StackPanel Background="{ThemeResource SystemControlBackgroundListLowBrush}" Margin="7,5">
@@ -137,14 +142,22 @@
                                     <DataTemplate>
                                         <Grid>
                                             <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="0"/> <!--0-->
-                                                <ColumnDefinition Width="auto"/> <!--1-->
-                                                <ColumnDefinition Width="4"/> <!--2-->
-                                                <ColumnDefinition Width="50"/> <!--3-->
-                                                <ColumnDefinition Width="60"/> <!--4-->
-                                                <ColumnDefinition Width="50"/> <!--5-->
-                                                <ColumnDefinition Width="auto"/> <!--6-->
-                                                <ColumnDefinition Width="*"/> <!--7-->
+                                                <ColumnDefinition Width="0"/>
+                                                <!--0-->
+                                                <ColumnDefinition Width="auto"/>
+                                                <!--1-->
+                                                <ColumnDefinition Width="4"/>
+                                                <!--2-->
+                                                <ColumnDefinition Width="50"/>
+                                                <!--3-->
+                                                <ColumnDefinition Width="60"/>
+                                                <!--4-->
+                                                <ColumnDefinition Width="50"/>
+                                                <!--5-->
+                                                <ColumnDefinition Width="auto"/>
+                                                <!--6-->
+                                                <ColumnDefinition Width="*"/>
+                                                <!--7-->
                                             </Grid.ColumnDefinitions>
 
                                             <TextBlock Grid.Column="1" Text="{Binding Name}" VerticalAlignment="Center">
@@ -166,17 +179,17 @@
                         </StackPanel>
                     </DataTemplate>
                 </toolControls:DataGrid.ItemDetailsTemplate>
-                
+
             </toolControls:DataGrid>
         </Grid>
 
-        <Grid Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="3">
+        <Grid Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="3" Visibility="{x:Bind Settings.VisibilityFilterPanel}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="30"/>
                 <ColumnDefinition Width="30"/>
             </Grid.ColumnDefinitions>
-           
+
             <TextBox Grid.Column="0" Header="Путь к файлу логов" Text="{x:Bind Settings.FullNameFileLogs, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             <Button Grid.Column="1" VerticalAlignment="Bottom" Content="..." Click="ButtonGetFileNameLog_Click"/>
             <Button Grid.Column="2" VerticalAlignment="Bottom" Content=">" Click="ButtonOpenFileLog_Click"/>
