@@ -83,6 +83,7 @@ namespace ComparisonAssistant
             }
             catch (Exception ex)
             {
+                Dialogs.ShowPopups(ex.Message);
                 return null;
             }
         }

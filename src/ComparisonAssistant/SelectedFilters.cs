@@ -14,6 +14,7 @@ namespace ComparisonAssistant
         private static Models.FilterPeriod _selectedPeriod = _staticFilterPeriods[0];
         private DateTime _selectedDateStart = DateTime.MinValue;
         private DateTime _selectedDateEnd = DateTime.MaxValue;
+        private bool _methodChangeSelectedDate;
 
         public List<Models.FilterPeriod> FilterPeriods = _staticFilterPeriods;
 
@@ -25,8 +26,8 @@ namespace ComparisonAssistant
 
         public string SelectedUser { get; set; } = string.Empty;
         public string SelectedTask { get; set; } = string.Empty;
-        public Models.FilterPeriod SelectedPeriod { get => _selectedPeriod; set { _selectedPeriod = value; ChangeSelectedDate(); } } 
-        public DateTime SelectedDateStart { get => _selectedDateStart; set { _selectedDateStart = value; SetFilterAnyPeriod(); } } 
+        public Models.FilterPeriod SelectedPeriod { get => _selectedPeriod; set { _selectedPeriod = value; ChangeSelectedDate(); } }
+        public DateTime SelectedDateStart { get => _selectedDateStart; set { _selectedDateStart = value; SetFilterAnyPeriod(); } }
         public DateTime SelectedDateEnd { get => _selectedDateEnd; set { _selectedDateEnd = value; SetFilterAnyPeriod(); } }
         public DateTime DateTaskChangedMin { get; set; } = DateTime.MinValue;
         public DateTime DateTaskChangedMax { get; set; } = DateTime.MaxValue;
@@ -55,17 +56,34 @@ namespace ComparisonAssistant
 
         private void ChangeSelectedDate()
         {
-            if (!SelectedPeriod.AnyPeriod)
+            if (_updateElementsEvents.Updating)
+                return;
+
+            new Settings().SelectedFilterPeriods = _selectedPeriod.Description;
+
+            if (!_selectedPeriod.AnyPeriod)
             {
+                _methodChangeSelectedDate = true;
                 SelectedDateStart = _selectedPeriod.DateStart;
                 SelectedDateEnd = _selectedPeriod.DateEnd;
+                _methodChangeSelectedDate = false;
             }
 
             _updateElementsEvents.EvokeUpdating();
         }
 
+        public void SetFilterByString(string filterName)
+        {
+            if (string.IsNullOrEmpty(filterName))
+                SelectedPeriod = _staticFilterPeriods.First(f => f.ByDefault);
+            else
+                SelectedPeriod = _staticFilterPeriods.First(f => f.Description == filterName);
+        }
+
         private void SetFilterAnyPeriod()
         {
+            if (_methodChangeSelectedDate || _updateElementsEvents.Updating)
+                return;
             _selectedPeriod = _staticFilterPeriods.First(f => f.AnyPeriod);
             _updateElementsEvents.EvokeUpdating();
         }

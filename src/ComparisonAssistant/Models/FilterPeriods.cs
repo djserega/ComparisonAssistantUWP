@@ -16,7 +16,7 @@ namespace ComparisonAssistant.Models
         {
             DateTime currentDay = DateTime.Now.Date;
 
-            return new List<FilterPeriod>()
+            List<FilterPeriod> list = new List<FilterPeriod>()
             {
                 new FilterPeriod("Сегодня", currentDay),
                 new FilterPeriod("Со вчера", currentDay.AddDays(-1)),
@@ -25,6 +25,9 @@ namespace ComparisonAssistant.Models
                 new FilterPeriod("Последний месяц", currentDay.AddMonths(-1)),
                 new FilterPeriod("Произвольный")
             };
+            list[0].ByDefault = true;
+
+            return list;
         }
 
     }
@@ -43,6 +46,7 @@ namespace ComparisonAssistant.Models
         public DateTime DateStart { get; set; }
         public DateTime DateEnd { get; set; }
         public bool AnyPeriod { get; set; }
+        public bool ByDefault { get; set; }
 
         public override string ToString()
         {

@@ -62,6 +62,8 @@ namespace ComparisonAssistant
         {
             base.OnNavigatedTo(e);
 
+            SelectedFilters.SetFilterByString(Settings.SelectedFilterPeriods);
+
             UpdateDB(true);
         }
 
@@ -394,7 +396,7 @@ namespace ComparisonAssistant
         {
             try
             {
-                _updateElementsEvents.Updating = true;     
+                _updateElementsEvents.Updating = true;
                 Bindings.Update();
                 _updateElementsEvents.Updating = false;
             }
