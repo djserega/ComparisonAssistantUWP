@@ -171,7 +171,7 @@
                                             <RadioButton Grid.Column="3" Content="М" IsChecked="{Binding IsModule}" IsEnabled="False"/>
                                             <RadioButton Grid.Column="4" Content="ММ" IsChecked="{Binding IsModuleManager}" IsEnabled="False"/>
                                             <RadioButton Grid.Column="5" Content="Ф" IsChecked="{Binding IsForm}" IsEnabled="False"/>
-                                            <TextBox x:Name="FileDetailsTextBoxFullName" Grid.Column="6" Text="{Binding FullName}" IsEnabled="False" Visibility="{Binding Path=VisibilityFullNameChangedFiles}"/>
+                                            <TextBlock x:Name="FileDetailsTextBoxFullName" Grid.Column="6" Text="{Binding FullName}" Visibility="{Binding Path=VisibilityFullNameChangedFiles}" VerticalAlignment="Center"/>
                                         </Grid>
                                     </DataTemplate>
                                 </ListView.ItemTemplate>
