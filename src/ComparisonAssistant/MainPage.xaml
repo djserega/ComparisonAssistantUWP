@@ -197,13 +197,21 @@
         <Grid Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="3" Visibility="{x:Bind Settings.VisibilityFilterPanel}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="30"/>
-                <ColumnDefinition Width="30"/>
+                <ColumnDefinition Width="40"/>
+                <ColumnDefinition Width="40"/>
             </Grid.ColumnDefinitions>
 
             <TextBox Grid.Column="0" Header="Путь к файлу логов" Text="{x:Bind Settings.FullNameFileLogs, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-            <Button Grid.Column="1" VerticalAlignment="Bottom" Content="..." Click="ButtonGetFileNameLog_Click"/>
-            <Button Grid.Column="2" VerticalAlignment="Bottom" Content=">" Click="ButtonOpenFileLog_Click"/>
+            <Button Grid.Column="1" VerticalAlignment="Bottom" Click="ButtonGetFileNameLog_Click">
+                <Button.Content>
+                    <SymbolIcon Symbol="Find"/>
+                </Button.Content>
+            </Button>
+            <Button Grid.Column="2" VerticalAlignment="Bottom" Click="ButtonOpenFileLog_Click">
+                <Button.Content>
+                    <SymbolIcon Symbol="OpenFile"/>
+                </Button.Content>
+            </Button>
         </Grid>
 
     </Grid>
