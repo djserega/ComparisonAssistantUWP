@@ -259,6 +259,8 @@ namespace ComparisonAssistant
 
         private async void UpdateDB(bool onNavigatedTo = false)
         {
+            PageInAppNotification.Show("Пожалуйста подождите. Выполняется чтение файла.");
+
             Settings.LogFileReadingIsComplete = false;
 
             if (!onNavigatedTo)
@@ -272,6 +274,8 @@ namespace ComparisonAssistant
 
             Settings.LogFileReadingIsComplete = true;
             UpdateFormElements();
+
+            PageInAppNotification.Dismiss();
         }
 
         private async Task UpdateDBAsync()
