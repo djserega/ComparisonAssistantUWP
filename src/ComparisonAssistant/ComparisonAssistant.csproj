@@ -123,6 +123,7 @@
     <Compile Include="SelectedFilters.cs" />
     <Compile Include="StaticSettings.cs" />
     <Compile Include="Converters.cs" />
+    <Compile Include="Storage1C.cs" />
     <Compile Include="ToastNotification.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace ComparisonAssistant
 {
-    public enum StageFilterPanel { Open, Minimize, Close }
+    public enum StagePanel { Open, Minimize, Close }
 }

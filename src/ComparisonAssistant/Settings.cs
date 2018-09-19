@@ -47,26 +47,63 @@ namespace ComparisonAssistant
             set => SetValueLocalSettings(_keySelectedFilterPeriods, value);
         }
 
-        public StageFilterPanel StageFilterPanel { get; set; } = StageFilterPanel.Open;
+        public StagePanel StageFilterPanel { get; set; } = StagePanel.Open;
         public GridLength WidthFilterPanel
         {
             get
             {
                 switch (StageFilterPanel)
                 {
-                    case StageFilterPanel.Open:
+                    case StagePanel.Open:
                         return new GridLength(315);
-                    case StageFilterPanel.Minimize:
+                    case StagePanel.Minimize:
                         return new GridLength(40);
-                    case StageFilterPanel.Close:
+                    case StagePanel.Close:
                         return new GridLength(0);
                     default:
                         return new GridLength(315);
                 }
             }
         }
-        public Visibility VisibilityFilterPanel { get => StageFilterPanel == StageFilterPanel.Open ? Visibility.Visible : Visibility.Collapsed; }
-        public Visibility VisibilityFilterPanelCompact { get => StageFilterPanel != StageFilterPanel.Open ? Visibility.Visible : Visibility.Collapsed; }
+        public Visibility VisibilityFilterPanel { get => StageFilterPanel == StagePanel.Open ? Visibility.Visible : Visibility.Collapsed; }
+        public Visibility VisibilityFilterPanelCompact { get => StageFilterPanel != StagePanel.Open ? Visibility.Visible : Visibility.Collapsed; }
+
+        public StagePanel StageSettingsPanel { get; set; } = StagePanel.Close;
+        public GridLength WidthSettingsPanel
+        {
+            get
+            {
+                switch (StageSettingsPanel)
+                {
+                    case StagePanel.Open:
+                        return new GridLength(315);
+                    case StagePanel.Minimize:
+                        return new GridLength(40);
+                    case StagePanel.Close:
+                        return new GridLength(0);
+                    default:
+                        return new GridLength(315);
+                }
+            }
+        }
+        public GridLength WidthSettingsPanelBorder
+        {
+            get
+            {
+                switch (StageSettingsPanel)
+                {
+                    case StagePanel.Open:
+                        return new GridLength(10);
+                    case StagePanel.Minimize:
+                        return new GridLength(0);
+                    case StagePanel.Close:
+                        return new GridLength(0);
+                    default:
+                        return new GridLength(10);
+                }
+            }
+        }
+        public Visibility VisibilitySettingsPanel { get => StageSettingsPanel == StagePanel.Open ? Visibility.Visible : Visibility.Collapsed; }
 
         private void SetValueLocalSettings(string key, object value)
         {

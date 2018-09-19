@@ -73,6 +73,7 @@ namespace ComparisonAssistant
 
         internal Settings Settings { get; set; } = new Settings();
         internal SelectedFilters SelectedFilters { get; set; } = new SelectedFilters(_updateElementsEvents);
+        internal Storage1C Storage1C { get; set; } = new Storage1C();
 
         #endregion
 
@@ -474,8 +475,16 @@ namespace ComparisonAssistant
 
         private void ButtonFilter_Click(object sender, RoutedEventArgs e)
         {
-            Settings.StageFilterPanel = Settings.StageFilterPanel == StageFilterPanel.Open
-                ? StageFilterPanel.Minimize : StageFilterPanel.Open;
+            Settings.StageFilterPanel = Settings.StageFilterPanel == StagePanel.Open
+                ? StagePanel.Minimize : StagePanel.Open;
+
+            UpdateFormElements();
+        }
+
+        private void ButtonSettings_Click(object sender, RoutedEventArgs e)
+        {
+            Settings.StageSettingsPanel = Settings.StageSettingsPanel == StagePanel.Open
+                ? StagePanel.Close : StagePanel.Open;
 
             UpdateFormElements();
         }
