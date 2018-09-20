@@ -493,7 +493,41 @@ namespace ComparisonAssistant
         {
             string result = Storage1C.CheckConnection();
             if (!string.IsNullOrEmpty(result))
-                Dialogs.ShowPopups("Не удалось подключить к хранилищу:\n\n" + result);
+                Dialogs.ShowPopups("Не удалось подключиться к хранилищу:\n\n" + result);
+        }
+
+        private async void ButtonGetPathBin1C_Click(object sender, RoutedEventArgs e)
+        {
+            FolderPicker folderPicker = new FolderPicker()
+            {
+                ViewMode = PickerViewMode.List,
+                SuggestedStartLocation = PickerLocationId.ComputerFolder
+            };
+            folderPicker.FileTypeFilter.Add("*");
+
+            StorageFolder catalog = await folderPicker.PickSingleFolderAsync();
+            if (catalog != null)
+            {
+                Storage1C.PathBin1C = catalog.Path;
+                UpdateFormElements();
+            }
+        }
+
+        private async void ButtonGetPathStorage_Click(object sender, RoutedEventArgs e)
+        {
+            FolderPicker folderPicker = new FolderPicker()
+            {
+                ViewMode = PickerViewMode.List,
+                SuggestedStartLocation = PickerLocationId.ComputerFolder
+            };
+            folderPicker.FileTypeFilter.Add("*");
+
+            StorageFolder catalog = await folderPicker.PickSingleFolderAsync();
+            if (catalog != null)
+            {
+                Storage1C.PathStorage = catalog.Path;
+                UpdateFormElements();
+            }
         }
     }
 }

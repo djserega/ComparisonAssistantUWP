@@ -256,7 +256,8 @@
                         Text="{x:Bind Storage1C.PathBin1C}"/>
                     <Button
                         Grid.Column="1"
-                        VerticalAlignment="Bottom">
+                        VerticalAlignment="Bottom"
+                        Click="ButtonGetPathBin1C_Click">
                         <Button.Content>
                             <SymbolIcon Symbol="Find"/>
                         </Button.Content>
@@ -273,7 +274,8 @@
                         Text="{x:Bind Storage1C.PathStorage}"/>
                     <Button
                         Grid.Column="1"
-                        VerticalAlignment="Bottom">
+                        VerticalAlignment="Bottom"
+                        Click="ButtonGetPathStorage_Click">
                         <Button.Content>
                             <SymbolIcon Symbol="Find"/>
                         </Button.Content>
@@ -281,10 +283,10 @@
                 </Grid>
                 <TextBox
                     Header="Пользователь хранилища"
-                    Text="{x:Bind Storage1C.StoragePassword}"/>
+                    Text="{x:Bind Storage1C.StorageUser}"/>
                 <PasswordBox
                     Header="Пароль хранилища"
-                    Password="{x:Bind Storage1C.StorageUser}"/>
+                    Password="{x:Bind Storage1C.StoragePassword}"/>
                 <Border Height="5"/>
                 <Button
                     Content="Проверить соединение"
