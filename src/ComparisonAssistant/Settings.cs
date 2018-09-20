@@ -105,6 +105,24 @@ namespace ComparisonAssistant
         }
         public Visibility VisibilitySettingsPanel { get => StageSettingsPanel == StagePanel.Open ? Visibility.Visible : Visibility.Collapsed; }
 
+        public GridLength HeightButtonPanel
+        {
+            get
+            {
+                switch (StageFilterPanel)
+                {
+                    case StagePanel.Open:
+                        return new GridLength(30);
+                    case StagePanel.Minimize:
+                        return new GridLength(70);
+                    case StagePanel.Close:
+                        return new GridLength(70);
+                    default:
+                        return new GridLength(30);
+                }
+            }
+        }
+
         private void SetValueLocalSettings(string key, object value)
         {
             if (_localSettings.Values.ContainsKey(key))

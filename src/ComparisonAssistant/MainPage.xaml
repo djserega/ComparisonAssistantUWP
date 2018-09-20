@@ -17,10 +17,10 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="10"/>
-            <ColumnDefinition Width="{x:Bind Settings.WidthFilterPanel}"/>
+            <ColumnDefinition Width="{x:Bind Settings.WidthFilterPanel}" MaxWidth="315"/>
             <ColumnDefinition Width="10"/>
-            <ColumnDefinition Width="{x:Bind Settings.WidthSettingsPanel}"/>
-            <ColumnDefinition Width="{x:Bind Settings.WidthSettingsPanelBorder}"/>
+            <ColumnDefinition Width="{x:Bind Settings.WidthSettingsPanel}" MaxWidth="315"/>
+            <ColumnDefinition Width="{x:Bind Settings.WidthSettingsPanelBorder}" MaxWidth="10"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="10"/>
         </Grid.ColumnDefinitions>
@@ -36,7 +36,8 @@
             Grid.Column ="1"
             Grid.Row="1">
             <Grid.RowDefinitions>
-                <RowDefinition Height="30"/>
+                <RowDefinition Height="{x:Bind Settings.HeightButtonPanel}" MaxHeight="70"/>
+                <RowDefinition Height="10"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
@@ -46,19 +47,31 @@
                     <ColumnDefinition/>
                     <ColumnDefinition Width="40"/>
                 </Grid.ColumnDefinitions>
-                <Button
-                    Grid.Column="0"
-                    Click="ButtonFilter_Click">
-                    <SymbolIcon Symbol="Filter"/>
-                </Button>
+                <StackPanel Grid.Column="0">
+                    <Button Click="ButtonFilter_Click">
+                        <SymbolIcon Symbol="Filter"/>
+                    </Button>
+                    <Border Height="3"/>
+                    <Button
+                        Click="ButtonSettings_Click">
+                        <SymbolIcon Symbol="Setting"/>
+                    </Button>
+                </StackPanel>
                 <Button
                     Grid.Column="2"
                     Click="ButtonSettings_Click">
                     <SymbolIcon Symbol="Setting"/>
                 </Button>
             </Grid>
-            <ScrollViewer
+
+            <Border
                 Grid.Row="1"
+                Height="5"
+                Margin="3"
+                Background="{ThemeResource AppBarItemPointerOverBackgroundThemeBrush}"/>
+
+            <ScrollViewer
+                Grid.Row="2"
                 Visibility="{x:Bind Settings.VisibilityFilterPanel}">
                 <StackPanel
                     Orientation="Vertical"
@@ -195,7 +208,7 @@
             </ScrollViewer>
 
             <StackPanel
-                Grid.Row="1"
+                Grid.Row="2"
                 Visibility="{x:Bind Settings.VisibilityFilterPanelCompact}">
                 <StackPanel Orientation="Vertical">
                     <TextBlock
