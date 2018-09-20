@@ -488,5 +488,12 @@ namespace ComparisonAssistant
 
             UpdateFormElements();
         }
+
+        private void ButtonStorageCheckConnection_Click(object sender, RoutedEventArgs e)
+        {
+            string result = Storage1C.CheckConnection();
+            if (!string.IsNullOrEmpty(result))
+                Dialogs.ShowPopups("Не удалось подключить к хранилищу:\n\n" + result);
+        }
     }
 }

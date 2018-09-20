@@ -288,7 +288,8 @@
                 <Border Height="5"/>
                 <Button
                     Content="Проверить соединение"
-                    HorizontalAlignment="Center"/>
+                    HorizontalAlignment="Center"
+                    Click="ButtonStorageCheckConnection_Click"/>
             </StackPanel>
         </Grid>
 
