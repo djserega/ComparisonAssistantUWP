@@ -12,6 +12,7 @@ namespace ComparisonAssistant
 {
     public class Settings : NotifyPropertyChangedClass
     {
+        #region Saved settings
         private ApplicationDataContainer _localSettings = ApplicationData.Current.LocalSettings;
         private readonly string _keyFullNameFileLogs = "FullNameFileLogs";
         private readonly string _keyPrefixSiteCommits = "PrefixSiteCommits";
@@ -47,6 +48,29 @@ namespace ComparisonAssistant
             set => SetValueLocalSettings(_keySelectedFilterPeriods, value);
         }
 
+
+        private void SetValueLocalSettings(string key, object value)
+        {
+            if (_localSettings.Values.ContainsKey(key))
+                _localSettings.Values[key] = value;
+            else
+                _localSettings.Values.Add(key, value);
+        }
+        private object GetValueLocalSettings(string key)
+        {
+            try
+            {
+                return (_localSettings.Values.ContainsKey(key)) ? _localSettings.Values[key] : null;
+            }
+            catch (Exception ex)
+            {
+                Dialogs.ShowPopups(ex.Message);
+                return null;
+            }
+        }
+        #endregion
+
+        #region Other settings
         public StagePanel StageFilterPanel { get; set; } = StagePanel.Open;
         public GridLength WidthFilterPanel
         {
@@ -122,25 +146,6 @@ namespace ComparisonAssistant
                 }
             }
         }
-
-        private void SetValueLocalSettings(string key, object value)
-        {
-            if (_localSettings.Values.ContainsKey(key))
-                _localSettings.Values[key] = value;
-            else
-                _localSettings.Values.Add(key, value);
-        }
-        private object GetValueLocalSettings(string key)
-        {
-            try
-            {
-                return (_localSettings.Values.ContainsKey(key)) ? _localSettings.Values[key] : null;
-            }
-            catch (Exception ex)
-            {
-                Dialogs.ShowPopups(ex.Message);
-                return null;
-            }
-        }
+        #endregion
     }
 }

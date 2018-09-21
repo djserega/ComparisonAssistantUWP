@@ -136,6 +136,22 @@ namespace ComparisonAssistant
             }
         }
 
+        private void ButtonFilter_Click(object sender, RoutedEventArgs e)
+        {
+            Settings.StageFilterPanel = Settings.StageFilterPanel == StagePanel.Open
+                ? StagePanel.Minimize : StagePanel.Open;
+
+            UpdateFormElements();
+        }
+
+        private void ButtonSettings_Click(object sender, RoutedEventArgs e)
+        {
+            Settings.StageSettingsPanel = Settings.StageSettingsPanel == StagePanel.Open
+                ? StagePanel.Close : StagePanel.Open;
+
+            UpdateFormElements();
+        }
+
         #endregion
 
         #region Handlers elements
@@ -183,6 +199,22 @@ namespace ComparisonAssistant
                     Commits.RemoveAt(i);
         }
 
+        private void DataGridCommits_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            if (e.OriginalSource is TextBlock source
+                && source.Parent == null)
+            {
+                if (SelectedFilters.SelectedCommit != null
+                   && SelectedFilters.SelectedCommit == SelectedFilters.SelectedCommit2)
+                {
+                    SelectedFilters.SelectedCommit = null;
+                    UpdateFormElements();
+                }
+                SelectedFilters.SelectedCommit2 = SelectedFilters.SelectedCommit;
+            }
+        }
+
+        #region MenuFlyoutItem
         private void MenuFlyoutItemSelectedDateEnd_Click(object sender, RoutedEventArgs e)
         {
             SelectedFilters.SelectedDateEnd = DateTime.Now;
@@ -224,21 +256,22 @@ namespace ComparisonAssistant
             }
         }
 
-        private void DataGridCommits_Tapped(object sender, TappedRoutedEventArgs e)
+        private void MenuFlyoutItemCopyObjectNameToClipboard_Click(object sender, RoutedEventArgs e)
         {
-            if (e.OriginalSource is TextBlock source
-                && source.Parent == null)
-            {
-                if (SelectedFilters.SelectedCommit != null
-                   && SelectedFilters.SelectedCommit == SelectedFilters.SelectedCommit2)
-                {
-                    SelectedFilters.SelectedCommit = null;
-                    UpdateFormElements();
-                }
-                SelectedFilters.SelectedCommit2 = SelectedFilters.SelectedCommit;
-            }
+            Models.File fileObject = GetFileObjectFromRoutedEventArgs(e);
+            if (fileObject != null)
+                SetTextToClipboard(fileObject.ObjectName);
         }
 
+        private void MenuFlyoutItemCopyTypeObjectAndObjectNameToClipboard_Click(object sender, RoutedEventArgs e)
+        {
+            Models.File fileObject = GetFileObjectFromRoutedEventArgs(e);
+            if (fileObject != null)
+                SetTextToClipboard($"{fileObject.TypeObjectName}.{fileObject.ObjectName}");
+        }
+        #endregion
+
+        #region Visibility FileDetailsFullname
         private void ChecboxVisibleFileDetailsFullname_Checked(object sender, RoutedEventArgs e)
         {
             ChangeVisibilityFileDetailsTextBoxFullName();
@@ -252,7 +285,8 @@ namespace ComparisonAssistant
         private void ChangeVisibilityFileDetailsTextBoxFullName()
         {
             StaticSettings.VisibleFullNameChangedFiles = !StaticSettings.VisibleFullNameChangedFiles;
-        }
+        } 
+        #endregion
 
         #endregion
 
@@ -443,51 +477,7 @@ namespace ComparisonAssistant
 
         #endregion
 
-        private void MenuFlyoutItemCopyObjectNameToClipboard_Click(object sender, RoutedEventArgs e)
-        {
-            Models.File fileObject = GetFileObjectFromRoutedEventArgs(e);
-            if (fileObject != null)
-                SetTextToClipboard(fileObject.ObjectName);
-        }
-
-        private void MenuFlyoutItemCopyTypeObjectAndObjectNameToClipboard_Click(object sender, RoutedEventArgs e)
-        {
-            Models.File fileObject = GetFileObjectFromRoutedEventArgs(e);
-            if (fileObject != null)
-                SetTextToClipboard($"{fileObject.TypeObjectName}.{fileObject.ObjectName}");
-        }
-
-        private void SetTextToClipboard(string text)
-        {
-            DataPackage dataPackage = new DataPackage();
-            dataPackage.SetText(text);
-
-            Clipboard.SetContent(dataPackage);
-        }
-
-        private Models.File GetFileObjectFromRoutedEventArgs(RoutedEventArgs e)
-        {
-            if (e.OriginalSource is MenuFlyoutItem menuItem)
-                if (menuItem.DataContext is Models.File fileObject)
-                    return fileObject;
-            return null;
-        }
-
-        private void ButtonFilter_Click(object sender, RoutedEventArgs e)
-        {
-            Settings.StageFilterPanel = Settings.StageFilterPanel == StagePanel.Open
-                ? StagePanel.Minimize : StagePanel.Open;
-
-            UpdateFormElements();
-        }
-
-        private void ButtonSettings_Click(object sender, RoutedEventArgs e)
-        {
-            Settings.StageSettingsPanel = Settings.StageSettingsPanel == StagePanel.Open
-                ? StagePanel.Close : StagePanel.Open;
-
-            UpdateFormElements();
-        }
+        #region Storage1C
 
         private void ButtonStorageCheckConnection_Click(object sender, RoutedEventArgs e)
         {
@@ -528,6 +518,24 @@ namespace ComparisonAssistant
                 Storage1C.PathStorage = catalog.Path;
                 UpdateFormElements();
             }
+        }
+
+        #endregion
+
+        private void SetTextToClipboard(string text)
+        {
+            DataPackage dataPackage = new DataPackage();
+            dataPackage.SetText(text);
+
+            Clipboard.SetContent(dataPackage);
+        }
+
+        private Models.File GetFileObjectFromRoutedEventArgs(RoutedEventArgs e)
+        {
+            if (e.OriginalSource is MenuFlyoutItem menuItem)
+                if (menuItem.DataContext is Models.File fileObject)
+                    return fileObject;
+            return null;
         }
     }
 }
