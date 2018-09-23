@@ -76,7 +76,7 @@ namespace ComparisonAssistant
 
         internal Settings Settings { get; set; } = new Settings();
         internal SelectedFilters SelectedFilters { get; set; } = new SelectedFilters(_updateElementsEvents);
-        internal Storage1C Storage1C { get; set; } = new Storage1C(_valueStorage1CEvents);
+        internal Storage1C Storage1C { get; set; } = new Storage1C(_updateElementsEvents, _valueStorage1CEvents);
 
         #endregion
 

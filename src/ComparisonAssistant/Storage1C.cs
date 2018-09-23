@@ -3,15 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI.Xaml;
 
 namespace ComparisonAssistant
 {
     public class Storage1C
     {
-        private static ValueStorage1CEvents _valueStorage1CEvents;
+        private UpdateElementsEvents _updateElementsEvents;
+        private ValueStorage1CEvents _valueStorage1CEvents;
 
-        public Storage1C(ValueStorage1CEvents valueStorage1CEvents)
+        public Storage1C(UpdateElementsEvents updateElementsEvents, ValueStorage1CEvents valueStorage1CEvents)
         {
+            _updateElementsEvents = updateElementsEvents;
             _valueStorage1CEvents = valueStorage1CEvents;
         }
 
@@ -31,6 +34,12 @@ namespace ComparisonAssistant
             set => _valueStorage1CEvents.SaveValue("Storage1CStorageUser", value);
         }
         public string StoragePassword { get; set; }
+
+        public bool DBTypeServer { get => DBType == "DBServer"; set { DBType = "DBServer"; _updateElementsEvents.EvokeUpdating(); } }
+        public bool DBTypeFile { get => DBType == "DBFile"; set { DBType = "DBFile"; _updateElementsEvents.EvokeUpdating(); } }
+
+        public Visibility VisibilityDBTypeServer { get => DBTypeServer ? Visibility.Visible : Visibility.Collapsed; }
+        public Visibility VisibilityDBTypeFile { get => DBTypeFile ? Visibility.Visible : Visibility.Collapsed; }
 
         public string DBType
         {

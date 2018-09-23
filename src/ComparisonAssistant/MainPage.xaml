@@ -290,18 +290,22 @@
                 <Border Height="5"/>
                 <StackPanel>
                     <TextBlock Text="Тип подключения"/>
-                    <RadioButton Content="Серверная"/>
-                    <RadioButton Content="Файловая"/>
+                    <RadioButton
+                        Content="Серверная"
+                        IsChecked="{x:Bind Storage1C.DBTypeServer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <RadioButton
+                        Content="Файловая"
+                        IsChecked="{x:Bind Storage1C.DBTypeFile, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 </StackPanel>
-                <StackPanel>
+                <StackPanel Visibility="{x:Bind Storage1C.VisibilityDBTypeServer}">
                     <TextBox 
-                    Header="Сервер"
-                    Text="{x:Bind Storage1C.DBServer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        Header="Сервер"
+                        Text="{x:Bind Storage1C.DBServer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                     <TextBox
-                    Header="Имя базы"
-                    Text="{x:Bind Storage1C.DBName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        Header="Имя базы"
+                        Text="{x:Bind Storage1C.DBName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 </StackPanel>
-                <StackPanel>
+                <StackPanel Visibility="{x:Bind Storage1C.VisibilityDBTypeFile}">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
@@ -311,9 +315,9 @@
                             Header="Путь к каталогу базы"
                             Text="{x:Bind Storage1C.DBPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                         <Button
-                        Grid.Column="1"
-                        VerticalAlignment="Bottom"
-                        Click="ButtonGetDBPath_Click">
+                            Grid.Column="1"
+                            VerticalAlignment="Bottom"
+                            Click="ButtonGetDBPath_Click">
                             <Button.Content>
                                 <SymbolIcon Symbol="Find"/>
                             </Button.Content>
