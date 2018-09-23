@@ -14,9 +14,17 @@ namespace ComparisonAssistant
     {
         #region Saved settings
         private ApplicationDataContainer _localSettings = ApplicationData.Current.LocalSettings;
-        private readonly string _keyFullNameFileLogs = "FullNameFileLogs";
-        private readonly string _keyPrefixSiteCommits = "PrefixSiteCommits";
-        private readonly string _keySelectedFilterPeriods = "SelectedFilterPeriods";
+        private const string _keyFullNameFileLogs = "FullNameFileLogs";
+        private const string _keyPrefixSiteCommits = "PrefixSiteCommits";
+        private const string _keySelectedFilterPeriods = "SelectedFilterPeriods";
+
+        private const string _keyStorage1CPathBin1C = "Storage1CPathBin1C";
+        private const string _keyStorage1CPathStorage = "Storage1CPathStorage";
+        private const string _keyStorage1CStorageUser = "Storage1CStorageUser";
+        private const string _keyStorage1CDBType = "Storage1CDBType";
+        private const string _keyStorage1CDBPath = "Storage1CDBPath";
+        private const string _keyStorage1CDBServer = "Storage1CDBServer";
+        private const string _keyStorage1CDBName = "Storage1CDBName";
 
         public Settings()
         {
@@ -48,6 +56,55 @@ namespace ComparisonAssistant
             set => SetValueLocalSettings(_keySelectedFilterPeriods, value);
         }
 
+        public void SaveStorageValue(string name, string value)
+        {
+            switch (name)
+            {
+                case "Storage1CPathBin1C":
+                    SetValueLocalSettings(_keyStorage1CPathBin1C, value);
+                    break;
+                case "Storage1CPathStorage":
+                    SetValueLocalSettings(_keyStorage1CPathStorage, value);
+                    break;
+                case "Storage1CStorageUser":
+                    SetValueLocalSettings(_keyStorage1CStorageUser, value);
+                    break;
+                case "Storage1CDBType":
+                    SetValueLocalSettings(_keyStorage1CDBType, value);
+                    break;
+                case "Storage1CDBPath":
+                    SetValueLocalSettings(_keyStorage1CDBPath, value);
+                    break;
+                case "Storage1CDBServer":
+                    SetValueLocalSettings(_keyStorage1CDBServer, value);
+                    break;
+                case "Storage1CDBName":
+                    SetValueLocalSettings(_keyStorage1CDBName, value);
+                    break;
+            }
+        }
+        public string LoadStorageValue(string name)
+        {
+            switch (name)
+            {
+                case "Storage1CPathBin1C":
+                    return GetValueLocalSettings(_keyStorage1CPathBin1C) as string;
+                case "Storage1CPathStorage":
+                    return GetValueLocalSettings(_keyStorage1CPathStorage) as string;
+                case "Storage1CStorageUser":
+                    return GetValueLocalSettings(_keyStorage1CStorageUser) as string;
+                case "Storage1CDBType":
+                    return GetValueLocalSettings(_keyStorage1CDBType) as string;
+                case "Storage1CDBPath":
+                    return GetValueLocalSettings(_keyStorage1CDBPath) as string;
+                case "Storage1CDBServer":
+                    return GetValueLocalSettings(_keyStorage1CDBServer) as string;
+                case "Storage1CDBName":
+                    return GetValueLocalSettings(_keyStorage1CDBName) as string;
+                default:
+                    return string.Empty;  
+            }
+        }
 
         private void SetValueLocalSettings(string key, object value)
         {

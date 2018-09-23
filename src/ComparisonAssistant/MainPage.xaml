@@ -253,7 +253,7 @@
                     <TextBox
                         Grid.Column="0"
                         Header="Путь к каталогу 1С"
-                        Text="{x:Bind Storage1C.PathBin1C}"/>
+                        Text="{x:Bind Storage1C.PathBin1C, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                     <Button
                         Grid.Column="1"
                         VerticalAlignment="Bottom"
@@ -271,7 +271,7 @@
                     <TextBox
                         Grid.Column="0"
                         Header="Путь к хранилищу конфигурации"
-                        Text="{x:Bind Storage1C.PathStorage}"/>
+                        Text="{x:Bind Storage1C.PathStorage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                     <Button
                         Grid.Column="1"
                         VerticalAlignment="Bottom"
@@ -283,10 +283,43 @@
                 </Grid>
                 <TextBox
                     Header="Пользователь хранилища"
-                    Text="{x:Bind Storage1C.StorageUser}"/>
+                    Text="{x:Bind Storage1C.StorageUser, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 <PasswordBox
                     Header="Пароль хранилища"
                     Password="{x:Bind Storage1C.StoragePassword}"/>
+                <Border Height="5"/>
+                <StackPanel>
+                    <TextBlock Text="Тип подключения"/>
+                    <RadioButton Content="Серверная"/>
+                    <RadioButton Content="Файловая"/>
+                </StackPanel>
+                <StackPanel>
+                    <TextBox 
+                    Header="Сервер"
+                    Text="{x:Bind Storage1C.DBServer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBox
+                    Header="Имя базы"
+                    Text="{x:Bind Storage1C.DBName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+                <StackPanel>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="40"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox 
+                            Header="Путь к каталогу базы"
+                            Text="{x:Bind Storage1C.DBPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <Button
+                        Grid.Column="1"
+                        VerticalAlignment="Bottom"
+                        Click="ButtonGetDBPath_Click">
+                            <Button.Content>
+                                <SymbolIcon Symbol="Find"/>
+                            </Button.Content>
+                        </Button>
+                    </Grid>
+                </StackPanel>
                 <Border Height="5"/>
                 <Button
                     Content="Проверить соединение"

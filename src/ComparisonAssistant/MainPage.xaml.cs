@@ -38,6 +38,7 @@ namespace ComparisonAssistant
         #region Private events
 
         private static UpdateElementsEvents _updateElementsEvents = new UpdateElementsEvents();
+        private static ValueStorage1CEvents _valueStorage1CEvents = new ValueStorage1CEvents();
 
         #endregion
 
@@ -56,6 +57,8 @@ namespace ComparisonAssistant
             InitializeComponent();
 
             _updateElementsEvents.UpdateElementsEvent += () => { UpdateFormElements(); };
+            _valueStorage1CEvents.SaveValueEvent += (string name, string value) => { Settings.SaveStorageValue(name, value); };
+            _valueStorage1CEvents.LoadValueEvent += (string name) => { return Settings.LoadStorageValue(name); };
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -73,7 +76,7 @@ namespace ComparisonAssistant
 
         internal Settings Settings { get; set; } = new Settings();
         internal SelectedFilters SelectedFilters { get; set; } = new SelectedFilters(_updateElementsEvents);
-        internal Storage1C Storage1C { get; set; } = new Storage1C();
+        internal Storage1C Storage1C { get; set; } = new Storage1C(_valueStorage1CEvents);
 
         #endregion
 
@@ -520,6 +523,23 @@ namespace ComparisonAssistant
             }
         }
 
+        private async void ButtonGetDBPath_Click(object sender, RoutedEventArgs e)
+        {
+            FolderPicker folderPicker = new FolderPicker()
+            {
+                ViewMode = PickerViewMode.List,
+                SuggestedStartLocation = PickerLocationId.ComputerFolder
+            };
+            folderPicker.FileTypeFilter.Add("*");
+
+            StorageFolder catalog = await folderPicker.PickSingleFolderAsync();
+            if (catalog != null)
+            {
+                Storage1C.DBPath = catalog.Path;
+                UpdateFormElements();
+            }
+        }
+
         #endregion
 
         private void SetTextToClipboard(string text)
@@ -537,5 +557,6 @@ namespace ComparisonAssistant
                     return fileObject;
             return null;
         }
+
     }
 }
