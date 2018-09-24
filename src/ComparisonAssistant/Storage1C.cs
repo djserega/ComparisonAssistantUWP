@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -66,6 +67,7 @@ namespace ComparisonAssistant
         {
             StringBuilder stringBuilder = new StringBuilder();
 
+            #region Check parameters
             if (string.IsNullOrEmpty(PathBin1C))
                 stringBuilder.AppendLine("  - Не выбран каталог 1С");
             if (string.IsNullOrEmpty(PathStorage))
@@ -73,12 +75,50 @@ namespace ComparisonAssistant
             if (string.IsNullOrEmpty(StorageUser))
                 stringBuilder.AppendLine("  - Не заполнен пользователь хранилища.");
 
+            if (DBType == "DBServer")
+            {
+                if (string.IsNullOrEmpty(DBServer))
+                    stringBuilder.AppendLine("  - Не указан сервер");
+                if (string.IsNullOrEmpty(DBName))
+                    stringBuilder.AppendLine("  - Не указано имя базы");
+            }
+            else if (DBType == "DBFile")
+            {
+                if (string.IsNullOrEmpty(DBPath))
+                    stringBuilder.AppendLine("  - Не выбран каталог базы");
+            }
+            else
+                stringBuilder.AppendLine("  - Не выбран тип подключения");
+
             string result = stringBuilder.ToString();
 
             if (!string.IsNullOrEmpty(result))
                 return result;
 
+            #endregion
+
+            stringBuilder.Append($"\"{PathBin1C}\\1cv8.exe\"");
+            stringBuilder.Append(" ");
+            stringBuilder.Append("designer");
+            stringBuilder.Append(" ");
+
+            stringBuilder.Append($"/s {DBServer}\\{DBName}");
+            stringBuilder.Append(" ");
+
+            stringBuilder.Append("/configurationrepositoryN");
+            stringBuilder.Append(" ");
+            stringBuilder.Append($"\"{StorageUser}\"");
+            stringBuilder.Append(" ");
+            if (!string.IsNullOrEmpty(StoragePassword))
+            {
+                stringBuilder.Append($"\"{StoragePassword}");
+                stringBuilder.Append(" ");
+            }
+
+            string commandLineString = stringBuilder.ToString();
+
             return string.Empty;
         }
+
     }
 }
