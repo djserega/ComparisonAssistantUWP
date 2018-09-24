@@ -459,7 +459,7 @@
 
         <Grid
             Grid.Column="1"
-            Grid.ColumnSpan="3"
+            Grid.ColumnSpan="5"
             Grid.Row="3"
             Visibility="{x:Bind Settings.VisibilityFilterPanel}">
             <Grid.ColumnDefinitions>
