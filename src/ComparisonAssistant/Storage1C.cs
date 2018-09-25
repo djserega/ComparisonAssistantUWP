@@ -4,6 +4,9 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Storage;
+using Windows.Storage.AccessCache;
+using Windows.System;
 using Windows.UI.Xaml;
 
 namespace ComparisonAssistant
@@ -63,7 +66,7 @@ namespace ComparisonAssistant
             set => _valueStorage1CEvents.SaveValue("Storage1CDBName", value);
         }
 
-        internal string CheckConnection()
+        internal async Task CheckConnection()
         {
             StringBuilder stringBuilder = new StringBuilder();
 
@@ -93,8 +96,7 @@ namespace ComparisonAssistant
             string result = stringBuilder.ToString();
 
             if (!string.IsNullOrEmpty(result))
-                return result;
-
+                throw new CheckConnectionException(result);
             #endregion
 
             stringBuilder.Append($"\"{PathBin1C}\\1cv8.exe\"");
@@ -102,7 +104,10 @@ namespace ComparisonAssistant
             stringBuilder.Append("designer");
             stringBuilder.Append(" ");
 
-            stringBuilder.Append($"/s {DBServer}\\{DBName}");
+            if (DBType == "DBServer")
+                stringBuilder.Append($"/s {DBServer}\\{DBName}");
+            else
+                stringBuilder.Append($"/f \"{DBPath}\"");
             stringBuilder.Append(" ");
 
             stringBuilder.Append("/configurationrepositoryN");
@@ -117,7 +122,24 @@ namespace ComparisonAssistant
 
             string commandLineString = stringBuilder.ToString();
 
-            return string.Empty;
+            StorageFile storageFile = await WriteTextToTempFile("TestConnectionToStorage1C.bat", commandLineString);
+
+            StorageApplicationPermissions.FutureAccessList.AddOrReplace("TestConnectionToStorage1C_bat", storageFile);
+
+            if (storageFile != null)
+            {
+                if (!await Launcher.LaunchFileAsync(storageFile))
+                    Dialogs.ShowPopups("Не удалось открыть файл: \n" + storageFile.Path);
+            }
+        }
+
+        private async Task<StorageFile> WriteTextToTempFile(string fileName, string text)
+        {
+            StorageFolder storageFolder = ApplicationData.Current.TemporaryFolder;
+            StorageFile storageFile = await storageFolder.CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting);
+            await FileIO.WriteTextAsync(storageFile, text);
+
+            return storageFile;
         }
 
     }

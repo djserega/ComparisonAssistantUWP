@@ -482,11 +482,16 @@ namespace ComparisonAssistant
 
         #region Storage1C
 
-        private void ButtonStorageCheckConnection_Click(object sender, RoutedEventArgs e)
+        private async void ButtonStorageCheckConnection_Click(object sender, RoutedEventArgs e)
         {
-            string result = Storage1C.CheckConnection();
-            if (!string.IsNullOrEmpty(result))
-                Dialogs.ShowPopups("Не удалось подключиться к хранилищу:\n\n" + result);
+            try
+            {
+                await Storage1C.CheckConnection();
+            }
+            catch (CheckConnectionException ex)
+            {
+                Dialogs.ShowPopups("Не удалось подключиться к хранилищу:\n\n" + ex.Message);
+            }
         }
 
         private async void ButtonGetPathBin1C_Click(object sender, RoutedEventArgs e)

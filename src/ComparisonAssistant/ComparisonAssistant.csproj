@@ -107,6 +107,7 @@
     <Compile Include="Dialogs.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Events.cs" />
+    <Compile Include="Exceptions.cs" />
     <Compile Include="Models\FilterPeriods.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="MainPage.xaml.cs">
