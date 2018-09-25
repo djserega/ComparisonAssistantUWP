@@ -329,6 +329,8 @@
                     Content="Проверить соединение"
                     HorizontalAlignment="Center"
                     Click="ButtonStorageCheckConnection_Click"/>
+                <Border Height="5"/>
+                <TextBox Header="Путь к файлу" Text="{x:Bind Storage1C.FileNameBatFileTestConnection}"/>
             </StackPanel>
         </Grid>
 

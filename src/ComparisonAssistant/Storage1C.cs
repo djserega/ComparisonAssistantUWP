@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.Storage.AccessCache;
+using Windows.Storage.Pickers;
 using Windows.System;
 using Windows.UI.Xaml;
 
@@ -15,12 +16,15 @@ namespace ComparisonAssistant
     {
         private UpdateElementsEvents _updateElementsEvents;
         private ValueStorage1CEvents _valueStorage1CEvents;
+        private string _fileNameBatFileTestConnection;
 
         public Storage1C(UpdateElementsEvents updateElementsEvents, ValueStorage1CEvents valueStorage1CEvents)
         {
             _updateElementsEvents = updateElementsEvents;
             _valueStorage1CEvents = valueStorage1CEvents;
         }
+
+        public string FileNameBatFileTestConnection { get => _fileNameBatFileTestConnection; set { _fileNameBatFileTestConnection = value; _updateElementsEvents.EvokeUpdating(); } }
 
         public string PathBin1C
         {
@@ -124,12 +128,14 @@ namespace ComparisonAssistant
 
             StorageFile storageFile = await WriteTextToTempFile("TestConnectionToStorage1C.bat", commandLineString);
 
-            StorageApplicationPermissions.FutureAccessList.AddOrReplace("TestConnectionToStorage1C_bat", storageFile);
-
             if (storageFile != null)
             {
                 if (!await Launcher.LaunchFileAsync(storageFile))
-                    Dialogs.ShowPopups("Не удалось открыть файл: \n" + storageFile.Path);
+                {
+                    Dialogs.ShowPopups("Не удалось открыть выполнить bat-файл запуска конфигуратора.\nРасположение файла прописано в поле 'Путь к файлу'.");
+
+                    FileNameBatFileTestConnection = storageFile.Path;
+                }
             }
         }
 
