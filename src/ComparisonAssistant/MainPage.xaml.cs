@@ -230,6 +230,16 @@ namespace ComparisonAssistant
             UpdateFormElements();
         }
 
+        private async void MenuFlyoutItemOpenSiteTasks_Click(object sender, RoutedEventArgs e)
+        {
+            if (SelectedFilters.SelectedCommit != null)
+            {
+                if (!string.IsNullOrWhiteSpace(Settings.PrefixSiteTasks)
+                    && !string.IsNullOrWhiteSpace(SelectedFilters.SelectedCommit.Task))
+                    await Launcher.LaunchUriAsync(new Uri(Settings.PrefixSiteTasks + SelectedFilters.SelectedCommit.Task));
+            }
+        }
+
         private async void MenuFlyoutItemOpenSiteCommit_Click(object sender, RoutedEventArgs e)
         {
             if (SelectedFilters.SelectedCommit != null)
@@ -562,6 +572,5 @@ namespace ComparisonAssistant
                     return fileObject;
             return null;
         }
-
     }
 }

@@ -204,6 +204,10 @@
                         Header="Префикс страницы коммита"
                         Width="290"
                         Text="{x:Bind Settings.PrefixSiteCommits, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBox
+                        Header="Префикс страницы задач"
+                        Width="290"
+                        Text="{x:Bind Settings.PrefixSiteTasks, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 </StackPanel>
             </ScrollViewer>
 
@@ -369,6 +373,9 @@
                             <MenuFlyoutItem
                                 Text="Открыть страницу коммита в браузере"
                                 Click="MenuFlyoutItemOpenSiteCommit_Click"/>
+                            <MenuFlyoutItem
+                                Text="Открыть страницу задачи в браузере"
+                                Click="MenuFlyoutItemOpenSiteTasks_Click"/>
                             <MenuFlyoutSeparator/>
                             <MenuFlyoutItem
                                 Text="Перейти к дню в календаре"

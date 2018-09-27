@@ -16,6 +16,7 @@ namespace ComparisonAssistant
         private ApplicationDataContainer _localSettings = ApplicationData.Current.LocalSettings;
         private const string _keyFullNameFileLogs = "FullNameFileLogs";
         private const string _keyPrefixSiteCommits = "PrefixSiteCommits";
+        private const string _keyPrefixSiteTasks = "PrefixSiteTasks";
         private const string _keySelectedFilterPeriods = "SelectedFilterPeriods";
 
         private const string _keyStorage1CPathBin1C = "Storage1CPathBin1C";
@@ -30,6 +31,7 @@ namespace ComparisonAssistant
         {
             SetDefaultValue(_keyFullNameFileLogs);
             SetDefaultValue(_keyPrefixSiteCommits);
+            SetDefaultValue(_keyPrefixSiteTasks);
             SetDefaultValue(_keySelectedFilterPeriods);
         }
 
@@ -49,6 +51,11 @@ namespace ComparisonAssistant
         {
             get => (string)GetValueLocalSettings(_keyPrefixSiteCommits);
             set => SetValueLocalSettings(_keyPrefixSiteCommits, value);
+        }
+        public string PrefixSiteTasks
+        {
+            get => (string)GetValueLocalSettings(_keyPrefixSiteTasks);
+            set => SetValueLocalSettings(_keyPrefixSiteTasks, value);
         }
         public string SelectedFilterPeriods
         {
