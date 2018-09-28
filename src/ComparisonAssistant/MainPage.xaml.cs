@@ -202,21 +202,6 @@ namespace ComparisonAssistant
                     Commits.RemoveAt(i);
         }
 
-        private void DataGridCommits_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            if (e.OriginalSource is TextBlock source
-                && source.Parent == null)
-            {
-                if (SelectedFilters.SelectedCommit != null
-                   && SelectedFilters.SelectedCommit == SelectedFilters.SelectedCommit2)
-                {
-                    SelectedFilters.SelectedCommit = null;
-                    UpdateFormElements();
-                }
-                SelectedFilters.SelectedCommit2 = SelectedFilters.SelectedCommit;
-            }
-        }
-
         #region MenuFlyoutItem
         private void MenuFlyoutItemSelectedDateEnd_Click(object sender, RoutedEventArgs e)
         {
@@ -230,58 +215,6 @@ namespace ComparisonAssistant
             UpdateFormElements();
         }
 
-        private async void MenuFlyoutItemOpenSiteTasks_Click(object sender, RoutedEventArgs e)
-        {
-            if (SelectedFilters.SelectedCommit != null)
-            {
-                if (!string.IsNullOrWhiteSpace(Settings.PrefixSiteTasks)
-                    && !string.IsNullOrWhiteSpace(SelectedFilters.SelectedCommit.Task))
-                    await Launcher.LaunchUriAsync(new Uri(Settings.PrefixSiteTasks + SelectedFilters.SelectedCommit.Task));
-            }
-        }
-
-        private async void MenuFlyoutItemOpenSiteCommit_Click(object sender, RoutedEventArgs e)
-        {
-            if (SelectedFilters.SelectedCommit != null)
-            {
-                if (!string.IsNullOrWhiteSpace(Settings.PrefixSiteCommits)
-                    && !string.IsNullOrWhiteSpace(SelectedFilters.SelectedCommit.CommitHash))
-                    await Launcher.LaunchUriAsync(new Uri(Settings.PrefixSiteCommits + SelectedFilters.SelectedCommit.CommitHash));
-            }
-        }
-
-        private void MenuFlyoutItemGoDayCalendar_Click(object sender, RoutedEventArgs e)
-        {
-            if (SelectedFilters.SelectedCommit != null)
-                SetDisplayDateCalendatView(SelectedFilters.SelectedCommit.Date);
-        }
-
-        private void MenuFlyoutItemOffDayCalendar_Click(object sender, RoutedEventArgs e)
-        {
-            if (SelectedFilters.SelectedCommit != null)
-            {
-                List<DateTimeOffset> selectedDates = CalendarViewDateTaskChanged.SelectedDates.ToList();
-
-                DateTime dayCommit = SelectedFilters.SelectedCommit.Date.StartDay();
-                for (int i = selectedDates.Count - 1; i >= 0; --i)
-                    if (selectedDates[i].Date == dayCommit)
-                        CalendarViewDateTaskChanged.SelectedDates.RemoveAt(i);
-            }
-        }
-
-        private void MenuFlyoutItemCopyObjectNameToClipboard_Click(object sender, RoutedEventArgs e)
-        {
-            Models.File fileObject = GetFileObjectFromRoutedEventArgs(e);
-            if (fileObject != null)
-                SetTextToClipboard(fileObject.ObjectName);
-        }
-
-        private void MenuFlyoutItemCopyTypeObjectAndObjectNameToClipboard_Click(object sender, RoutedEventArgs e)
-        {
-            Models.File fileObject = GetFileObjectFromRoutedEventArgs(e);
-            if (fileObject != null)
-                SetTextToClipboard($"{fileObject.TypeObjectName}.{fileObject.ObjectName}");
-        }
         #endregion
 
         #region Visibility FileDetailsFullname
@@ -298,7 +231,7 @@ namespace ComparisonAssistant
         private void ChangeVisibilityFileDetailsTextBoxFullName()
         {
             StaticSettings.VisibleFullNameChangedFiles = !StaticSettings.VisibleFullNameChangedFiles;
-        } 
+        }
         #endregion
 
         #endregion
@@ -324,6 +257,20 @@ namespace ComparisonAssistant
             UpdateFormElements();
 
             PageInAppNotification.Dismiss();
+
+            MainWindowFrame parameter = new MainWindowFrame()
+            {
+                Parameters = new object[1]
+                {
+                    Commits
+                },
+                TypesParameters = new Type[1]
+                {
+                    typeof(ObservableCollection<Models.Commit>)
+                }
+            };
+
+            MainFrame.Navigate(typeof(Views.DataGridCommits), parameter);
         }
 
         private async Task UpdateDBAsync()
@@ -557,20 +504,6 @@ namespace ComparisonAssistant
 
         #endregion
 
-        private void SetTextToClipboard(string text)
-        {
-            DataPackage dataPackage = new DataPackage();
-            dataPackage.SetText(text);
 
-            Clipboard.SetContent(dataPackage);
-        }
-
-        private Models.File GetFileObjectFromRoutedEventArgs(RoutedEventArgs e)
-        {
-            if (e.OriginalSource is MenuFlyoutItem menuItem)
-                if (menuItem.DataContext is Models.File fileObject)
-                    return fileObject;
-            return null;
-        }
     }
 }

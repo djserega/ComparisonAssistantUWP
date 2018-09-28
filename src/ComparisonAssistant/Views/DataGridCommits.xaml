@@ -1,0 +1,117 @@
+﻿<Page
+    x:Class="ComparisonAssistant.Views.DataGridCommits"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:ComparisonAssistant.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:toolControls="using:MyToolkit.Controls"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid>
+        <toolControls:DataGrid
+                    ItemsSource="{x:Bind Commits, Mode=OneWay}"
+                    SelectedItem="{x:Bind SelectedFilters.SelectedCommit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    Tapped="DataGridCommits_Tapped">
+            <toolControls:DataGrid.Columns>
+                <toolControls:DataGridTextColumn
+                            Header="Дата"
+                            Binding="{Binding Date}"
+                            Width="160"/>
+                <toolControls:DataGridTextColumn
+                            Header="Комментарий"
+                            Binding="{Binding Comment}"
+                            Width="*"/>
+                <toolControls:DataGridTextColumn
+                            Header="Хеш"
+                            Binding="{Binding CommitHashAbbreviated}"
+                            Width="100"/>
+            </toolControls:DataGrid.Columns>
+
+            <toolControls:DataGrid.ContextFlyout>
+                <MenuFlyout>
+                    <MenuFlyoutItem
+                                Text="Открыть страницу коммита в браузере"
+                                Click="MenuFlyoutItemOpenSiteCommit_Click"/>
+                    <MenuFlyoutItem
+                                Text="Открыть страницу задачи в браузере"
+                                Click="MenuFlyoutItemOpenSiteTasks_Click"/>
+                </MenuFlyout>
+            </toolControls:DataGrid.ContextFlyout>
+
+            <toolControls:DataGrid.ItemDetailsTemplate>
+                <DataTemplate>
+                    <StackPanel
+                                Background="{ThemeResource SystemControlBackgroundListLowBrush}"
+                                Margin="7,5">
+                        <ListView ItemsSource="{Binding Files}">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <!--0-->
+                                            <ColumnDefinition Width="0"/>
+                                            <!--1-->
+                                            <ColumnDefinition Width="auto"/>
+                                            <!--2-->
+                                            <ColumnDefinition Width="4"/>
+                                            <!--3-->
+                                            <ColumnDefinition Width="50"/>
+                                            <!--4-->
+                                            <ColumnDefinition Width="60"/>
+                                            <!--5-->
+                                            <ColumnDefinition Width="50"/>
+                                            <!--6-->
+                                            <ColumnDefinition Width="auto"/>
+                                            <!--7-->
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <TextBlock
+                                                    Grid.Column="1"
+                                                    Text="{Binding Name}"
+                                                    VerticalAlignment="Center">
+                                            <TextBlock.ContextFlyout>
+                                                <MenuFlyout>
+                                                    <MenuFlyoutItem
+                                                                Text="Скопировать имя и тип объекта"
+                                                                Click="MenuFlyoutItemCopyTypeObjectAndObjectNameToClipboard_Click"/>
+                                                    <MenuFlyoutItem
+                                                                Text="Скопировать имя объекта" 
+                                                                Click="MenuFlyoutItemCopyObjectNameToClipboard_Click"/>
+                                                </MenuFlyout>
+                                            </TextBlock.ContextFlyout>
+                                        </TextBlock>
+                                        <RadioButton
+                                                    Grid.Column="3"
+                                                    Content="М"
+                                                    IsChecked="{Binding IsModule}"
+                                                    IsEnabled="False"/>
+                                        <RadioButton
+                                                    Grid.Column="4"
+                                                    Content="ММ"
+                                                    IsChecked="{Binding IsModuleManager}"
+                                                    IsEnabled="False"/>
+                                        <RadioButton
+                                                    Grid.Column="5"
+                                                    Content="Ф"
+                                                    IsChecked="{Binding IsForm}"
+                                                    IsEnabled="False"/>
+                                        <TextBlock
+                                                    x:Name="FileDetailsTextBoxFullName"
+                                                    Grid.Column="6"
+                                                    Text="{Binding FullName}"
+                                                    Visibility="{Binding Path=VisibilityFullNameChangedFiles}"
+                                                    VerticalAlignment="Center"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </StackPanel>
+                </DataTemplate>
+            </toolControls:DataGrid.ItemDetailsTemplate>
+
+        </toolControls:DataGrid>
+    </Grid>
+</Page>
