@@ -19,6 +19,7 @@
             Content="Назад с списку задач"
             Click="ButtonBackToCommits_Click"/>
         <WebView
+            x:Name="WebViewMain"
             Grid.Row="1"
             Source="{x:Bind Source}"/>
     </Grid>

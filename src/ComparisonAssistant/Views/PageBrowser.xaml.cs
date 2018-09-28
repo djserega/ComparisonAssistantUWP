@@ -47,6 +47,7 @@ namespace ComparisonAssistant.Views
 
         private void ButtonBackToCommits_Click(object sender, RoutedEventArgs e)
         {
+            WebViewMain.Navigate(new Uri("about:blank"));
             _changeContentFrameEvents.ChangeContent(null, null);
         }
     }
