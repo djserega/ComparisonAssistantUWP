@@ -7,7 +7,7 @@ using Windows.UI.Xaml.Controls;
 
 namespace ComparisonAssistant
 {
-    internal class MainWindowFrame : NotifyPropertyChangedClass
+    public class MainWindowFrame : NotifyPropertyChangedClass
     {
         internal object[] Parameters { get; set; }
         internal Type[] TypesParameters { get; set; }

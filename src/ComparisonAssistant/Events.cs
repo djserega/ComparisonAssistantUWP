@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI.Xaml.Controls;
 
 namespace ComparisonAssistant
 {
@@ -33,6 +34,19 @@ namespace ComparisonAssistant
         public string LoadValue(string name)
         {
             return LoadValueEvent?.Invoke(name);
+        }
+    }
+
+    public delegate void ChangeContentFrame(Type newPage, MainWindowFrame mainWindowFrame);
+    public class ChangeContentFrameEvents : EventArgs
+    {
+        public event ChangeContentFrame ChangeContentFrameEvent;
+
+        public Page Page { get; private set; }
+        public object[] Parameters { get; private set; }
+        public void ChangeContent(Type newPage, MainWindowFrame mainWindowFrame)
+        {
+            ChangeContentFrameEvent?.Invoke(newPage, mainWindowFrame);
         }
     }
 }

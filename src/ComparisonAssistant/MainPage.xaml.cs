@@ -39,6 +39,7 @@ namespace ComparisonAssistant
 
         private static UpdateElementsEvents _updateElementsEvents = new UpdateElementsEvents();
         private static ValueStorage1CEvents _valueStorage1CEvents = new ValueStorage1CEvents();
+        private static ChangeContentFrameEvents _changeContentFrameEvents = new ChangeContentFrameEvents();
 
         #endregion
 
@@ -59,6 +60,14 @@ namespace ComparisonAssistant
             _updateElementsEvents.UpdateElementsEvent += () => { UpdateFormElements(); };
             _valueStorage1CEvents.SaveValueEvent += (string name, string value) => { Settings.SaveStorageValue(name, value); };
             _valueStorage1CEvents.LoadValueEvent += (string name) => { return Settings.LoadStorageValue(name); };
+            _changeContentFrameEvents.ChangeContentFrameEvent +=
+                (Type newPage, MainWindowFrame mainWindowFrame) =>
+                {
+                    if (newPage == null)
+                        ChangeFrameDataGridCommits();
+                    else
+                        ChangeFrameEvents(newPage, mainWindowFrame);
+                };
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -238,6 +247,11 @@ namespace ComparisonAssistant
 
         #region Other
 
+        private void ChangeFrameEvents(Type newPage, MainWindowFrame parameter)
+        {
+            MainFrame.Navigate(newPage, parameter);
+        }
+
         private async void UpdateDB(bool onNavigatedTo = false)
         {
             PageInAppNotification.Show("Пожалуйста подождите. Выполняется чтение файла.");
@@ -258,19 +272,18 @@ namespace ComparisonAssistant
 
             PageInAppNotification.Dismiss();
 
+            ChangeFrameDataGridCommits();
+        }
+
+        private void ChangeFrameDataGridCommits()
+        {
             MainWindowFrame parameter = new MainWindowFrame()
             {
-                Parameters = new object[1]
-                {
-                    Commits
-                },
-                TypesParameters = new Type[1]
-                {
-                    typeof(ObservableCollection<Models.Commit>)
-                }
+                Parameters = new object[2] { Commits, _changeContentFrameEvents },
+                TypesParameters = new Type[2] { typeof(ObservableCollection<Models.Commit>), typeof(ChangeContentFrameEvents) }
             };
 
-            MainFrame.Navigate(typeof(Views.DataGridCommits), parameter);
+            ChangeFrameEvents(typeof(Views.DataGridCommits), parameter);
         }
 
         private async Task UpdateDBAsync()
@@ -296,7 +309,7 @@ namespace ComparisonAssistant
 
                     _toast.Update(progressValueString: itemGroup.Key);
 
-                    await Task.Delay(500);
+                    await Task.Delay(100);
 
                     List<Models.Commit> list = new List<Models.Commit>();
 
@@ -503,7 +516,6 @@ namespace ComparisonAssistant
         }
 
         #endregion
-
 
     }
 }

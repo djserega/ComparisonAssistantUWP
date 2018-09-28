@@ -130,6 +130,9 @@
     <Compile Include="Views\DataGridCommits.xaml.cs">
       <DependentUpon>DataGridCommits.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\PageBrowser.xaml.cs">
+      <DependentUpon>PageBrowser.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -156,6 +159,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\DataGridCommits.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\PageBrowser.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
