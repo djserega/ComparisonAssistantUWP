@@ -26,7 +26,7 @@ namespace ComparisonAssistant.Views
     public sealed partial class DataGridCommits : Page
     {
         private static UpdateElementsEvents _updateElementsEvents = new UpdateElementsEvents();
-        private static ChangeContentFrameEvents _changeContentFrameEvents;
+        private ChangeContentFrameEvents _changeContentFrameEvents = new ChangeContentFrameEvents();
 
         public DataGridCommits()
         {
@@ -47,7 +47,6 @@ namespace ComparisonAssistant.Views
                 if (objParameter.CountParameter > 0)
                 {
                     Commits = objParameter.Parameters[0] as ObservableCollection<Models.Commit>;
-                    _changeContentFrameEvents = objParameter.Parameters[1] as ChangeContentFrameEvents;
                 }
             }
         }
@@ -78,10 +77,10 @@ namespace ComparisonAssistant.Views
 
                     MainWindowFrame parameter = new MainWindowFrame()
                     {
-                        Parameters = new object[2] { addressSite, _changeContentFrameEvents },
-                        TypesParameters = new Type[2] { typeof(string), typeof(ChangeContentFrameEvents) }
+                        Parameters = new object[1] { addressSite },
+                        TypesParameters = new Type[1] { typeof(string) }
                     };
-                    _changeContentFrameEvents?.ChangeContent(typeof(PageBrowser), parameter);
+                    _changeContentFrameEvents.ChangeContent(typeof(PageBrowser), parameter);
                 }
             }
         }
@@ -97,10 +96,10 @@ namespace ComparisonAssistant.Views
 
                     MainWindowFrame parameter = new MainWindowFrame()
                     {
-                        Parameters = new object[2] { addressSite, _changeContentFrameEvents },
-                        TypesParameters = new Type[2] { typeof(string), typeof(ChangeContentFrameEvents) }
+                        Parameters = new object[1] { addressSite },
+                        TypesParameters = new Type[1] { typeof(string) }
                     };
-                    _changeContentFrameEvents?.ChangeContent(typeof(PageBrowser), parameter);
+                    _changeContentFrameEvents.ChangeContent(typeof(PageBrowser), parameter);
                 }
             }
         }

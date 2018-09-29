@@ -40,7 +40,7 @@ namespace ComparisonAssistant
     public delegate void ChangeContentFrame(Type newPage, MainWindowFrame mainWindowFrame);
     public class ChangeContentFrameEvents : EventArgs
     {
-        public event ChangeContentFrame ChangeContentFrameEvent;
+        public static event ChangeContentFrame ChangeContentFrameEvent;
 
         public Page Page { get; private set; }
         public object[] Parameters { get; private set; }

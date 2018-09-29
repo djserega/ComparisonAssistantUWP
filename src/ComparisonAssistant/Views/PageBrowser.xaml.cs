@@ -22,7 +22,7 @@ namespace ComparisonAssistant.Views
     /// </summary>
     public sealed partial class PageBrowser : Page
     {
-        private static ChangeContentFrameEvents _changeContentFrameEvents;
+        private ChangeContentFrameEvents _changeContentFrameEvents = new ChangeContentFrameEvents();
 
         public PageBrowser()
         {
@@ -40,7 +40,6 @@ namespace ComparisonAssistant.Views
                 if (objParameter.CountParameter > 0)
                 {
                     Source = objParameter.Parameters[0] as string;
-                    _changeContentFrameEvents = objParameter.Parameters[1] as ChangeContentFrameEvents;
                 }
             }
         }

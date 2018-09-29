@@ -200,7 +200,7 @@ namespace ComparisonAssistant
                 switch (StageFilterPanel)
                 {
                     case StagePanel.Open:
-                        return new GridLength(30);
+                        return new GridLength(35);
                     case StagePanel.Minimize:
                         return new GridLength(70);
                     case StagePanel.Close:

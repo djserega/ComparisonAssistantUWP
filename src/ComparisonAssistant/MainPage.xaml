@@ -258,115 +258,9 @@
 
         <Grid Grid.Column="3" Grid.Row="1" x:Name="GridStorage1CPanel"
               Margin="3">
-            
-            <StackPanel>
-           
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="40"/>
-                    </Grid.ColumnDefinitions>
-                  
-                    <TextBox Grid.Column="0"
-                             Header="Путь к каталогу 1С"
-                             Text="{x:Bind Storage1C.PathBin1C, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                    
-                    <Button Grid.Column="1"
-                            VerticalAlignment="Bottom"
-                            Click="ButtonGetPathBin1C_Click">
-                        <Button.Content>
-                            <SymbolIcon Symbol="Find"/>
-                        </Button.Content>
-                    </Button>
-                    
-                </Grid>
-                
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="40"/>
-                    </Grid.ColumnDefinitions>
-                    
-                    <TextBox Grid.Column="0"
-                             Header="Путь к хранилищу конфигурации"
-                             Text="{x:Bind Storage1C.PathStorage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                   
-                    <Button Grid.Column="1"
-                            VerticalAlignment="Bottom"
-                            Click="ButtonGetPathStorage_Click">
-                        <Button.Content>
-                            <SymbolIcon Symbol="Find"/>
-                        </Button.Content>
-                    </Button>
-                    
-                </Grid>
-                
-                <TextBox Header="Пользователь хранилища"
-                         Text="{x:Bind Storage1C.StorageUser, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                
-                <PasswordBox Header="Пароль хранилища"
-                             Password="{x:Bind Storage1C.StoragePassword}"/>
-                
-                <Border Height="5"/>
-                
-                <StackPanel>
-                
-                    <TextBlock Text="Тип подключения"/>
-                    
-                    <RadioButton Content="Серверная"
-                                 IsChecked="{x:Bind Storage1C.DBTypeServer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                    
-                    <RadioButton Content="Файловая"
-                                 IsChecked="{x:Bind Storage1C.DBTypeFile, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                
-                </StackPanel>
-                
-                <StackPanel Visibility="{x:Bind Storage1C.VisibilityDBTypeServer}">
-                
-                    <TextBox Header="Сервер"
-                             Text="{x:Bind Storage1C.DBServer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                    
-                    <TextBox Header="Имя базы"
-                             Text="{x:Bind Storage1C.DBName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                
-                </StackPanel>
-                
-                <StackPanel Visibility="{x:Bind Storage1C.VisibilityDBTypeFile}">
-                
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="40"/>
-                        </Grid.ColumnDefinitions>
-                       
-                        <TextBox Header="Путь к каталогу базы"
-                                 Text="{x:Bind Storage1C.DBPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                        
-                        <Button Grid.Column="1"
-                                VerticalAlignment="Bottom"
-                                Click="ButtonGetDBPath_Click">
-                            <Button.Content>
-                                <SymbolIcon Symbol="Find"/>
-                            </Button.Content>
-                        </Button>
-                    
-                    </Grid>
-                
-                </StackPanel>
-            
-                <Border Height="5"/>
-                
-                <Button Content="Проверить соединение"
-                        HorizontalAlignment="Center"
-                        Click="ButtonStorageCheckConnection_Click"/>
-                
-                <Border Height="5"/>
-                
-                <TextBox Header="Путь к файлу"
-                         Text="{x:Bind Storage1C.FileNameBatFileTestConnection}"/>
-                
-            </StackPanel>
-            
+
+            <Frame x:Name="FrameStorage1C"/>
+
         </Grid>
 
         <Border Grid.Column="4" Grid.Row="1"
@@ -377,7 +271,7 @@
 
             <Grid>
                 
-                <Frame x:Name="MainFrame"/>
+                <Frame x:Name="FrameMain"/>
                 
                 <toolkitControls:InAppNotification x:Name="PageInAppNotification"
                                                    VerticalAlignment="Bottom"

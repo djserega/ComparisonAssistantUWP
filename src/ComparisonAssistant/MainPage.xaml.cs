@@ -38,7 +38,6 @@ namespace ComparisonAssistant
         #region Private events
 
         private static UpdateElementsEvents _updateElementsEvents = new UpdateElementsEvents();
-        private static ValueStorage1CEvents _valueStorage1CEvents = new ValueStorage1CEvents();
         private static ChangeContentFrameEvents _changeContentFrameEvents = new ChangeContentFrameEvents();
 
         #endregion
@@ -58,9 +57,7 @@ namespace ComparisonAssistant
             InitializeComponent();
 
             _updateElementsEvents.UpdateElementsEvent += () => { UpdateFormElements(); };
-            _valueStorage1CEvents.SaveValueEvent += (string name, string value) => { Settings.SaveStorageValue(name, value); };
-            _valueStorage1CEvents.LoadValueEvent += (string name) => { return Settings.LoadStorageValue(name); };
-            _changeContentFrameEvents.ChangeContentFrameEvent +=
+            ChangeContentFrameEvents.ChangeContentFrameEvent +=
                 (Type newPage, MainWindowFrame mainWindowFrame) =>
                 {
                     if (newPage == null)
@@ -74,6 +71,8 @@ namespace ComparisonAssistant
         {
             base.OnNavigatedTo(e);
 
+            FrameStorage1C.Navigate(typeof(Views.Storage1CView));
+
             SelectedFilters.SetFilterByString(Settings.SelectedFilterPeriods);
 
             UpdateDB(true);
@@ -85,7 +84,6 @@ namespace ComparisonAssistant
 
         internal Settings Settings { get; set; } = new Settings();
         internal SelectedFilters SelectedFilters { get; set; } = new SelectedFilters(_updateElementsEvents);
-        internal Storage1C Storage1C { get; set; } = new Storage1C(_updateElementsEvents, _valueStorage1CEvents);
 
         #endregion
 
@@ -247,9 +245,20 @@ namespace ComparisonAssistant
 
         #region Other
 
+        private void ChangeFrameDataGridCommits()
+        {
+            MainWindowFrame parameter = new MainWindowFrame()
+            {
+                Parameters = new object[1] { Commits },
+                TypesParameters = new Type[1] { typeof(ObservableCollection<Models.Commit>) }
+            };
+
+            ChangeFrameEvents(typeof(Views.DataGridCommits), parameter);
+        }
+
         private void ChangeFrameEvents(Type newPage, MainWindowFrame parameter)
         {
-            MainFrame.Navigate(newPage, parameter);
+            FrameMain.Navigate(newPage, parameter);
         }
 
         private async void UpdateDB(bool onNavigatedTo = false)
@@ -273,17 +282,6 @@ namespace ComparisonAssistant
             PageInAppNotification.Dismiss();
 
             ChangeFrameDataGridCommits();
-        }
-
-        private void ChangeFrameDataGridCommits()
-        {
-            MainWindowFrame parameter = new MainWindowFrame()
-            {
-                Parameters = new object[2] { Commits, _changeContentFrameEvents },
-                TypesParameters = new Type[2] { typeof(ObservableCollection<Models.Commit>), typeof(ChangeContentFrameEvents) }
-            };
-
-            ChangeFrameEvents(typeof(Views.DataGridCommits), parameter);
         }
 
         private async Task UpdateDBAsync()
@@ -449,73 +447,5 @@ namespace ComparisonAssistant
         }
 
         #endregion
-
-        #region Storage1C
-
-        private async void ButtonStorageCheckConnection_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                await Storage1C.CheckConnection();
-            }
-            catch (CheckConnectionException ex)
-            {
-                Dialogs.ShowPopups("Не удалось подключиться к хранилищу:\n\n" + ex.Message);
-            }
-        }
-
-        private async void ButtonGetPathBin1C_Click(object sender, RoutedEventArgs e)
-        {
-            FolderPicker folderPicker = new FolderPicker()
-            {
-                ViewMode = PickerViewMode.List,
-                SuggestedStartLocation = PickerLocationId.ComputerFolder
-            };
-            folderPicker.FileTypeFilter.Add("*");
-
-            StorageFolder catalog = await folderPicker.PickSingleFolderAsync();
-            if (catalog != null)
-            {
-                Storage1C.PathBin1C = catalog.Path;
-                UpdateFormElements();
-            }
-        }
-
-        private async void ButtonGetPathStorage_Click(object sender, RoutedEventArgs e)
-        {
-            FolderPicker folderPicker = new FolderPicker()
-            {
-                ViewMode = PickerViewMode.List,
-                SuggestedStartLocation = PickerLocationId.ComputerFolder
-            };
-            folderPicker.FileTypeFilter.Add("*");
-
-            StorageFolder catalog = await folderPicker.PickSingleFolderAsync();
-            if (catalog != null)
-            {
-                Storage1C.PathStorage = catalog.Path;
-                UpdateFormElements();
-            }
-        }
-
-        private async void ButtonGetDBPath_Click(object sender, RoutedEventArgs e)
-        {
-            FolderPicker folderPicker = new FolderPicker()
-            {
-                ViewMode = PickerViewMode.List,
-                SuggestedStartLocation = PickerLocationId.ComputerFolder
-            };
-            folderPicker.FileTypeFilter.Add("*");
-
-            StorageFolder catalog = await folderPicker.PickSingleFolderAsync();
-            if (catalog != null)
-            {
-                Storage1C.DBPath = catalog.Path;
-                UpdateFormElements();
-            }
-        }
-
-        #endregion
-
     }
 }
