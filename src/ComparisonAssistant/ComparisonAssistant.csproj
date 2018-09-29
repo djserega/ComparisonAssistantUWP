@@ -127,11 +127,11 @@
     <Compile Include="Converters.cs" />
     <Compile Include="Storage1C.cs" />
     <Compile Include="ToastNotification.cs" />
-    <Compile Include="Views\DataGridCommits.xaml.cs">
-      <DependentUpon>DataGridCommits.xaml</DependentUpon>
+    <Compile Include="Views\DataGridCommitsView.xaml.cs">
+      <DependentUpon>DataGridCommitsView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\PageBrowser.xaml.cs">
-      <DependentUpon>PageBrowser.xaml</DependentUpon>
+    <Compile Include="Views\PageBrowserView.xaml.cs">
+      <DependentUpon>PageBrowserView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Storage1CView.xaml.cs">
       <DependentUpon>Storage1CView.xaml</DependentUpon>
@@ -161,11 +161,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\DataGridCommits.xaml">
+    <Page Include="Views\DataGridCommitsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\PageBrowser.xaml">
+    <Page Include="Views\PageBrowserView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
