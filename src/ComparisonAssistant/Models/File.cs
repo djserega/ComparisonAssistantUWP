@@ -30,6 +30,8 @@ namespace ComparisonAssistant.Models
         public bool IsModule { get; set; } = false;
         public bool IsModuleManager { get; set; } = false;
         public bool IsForm { get; set; } = false;
+        public bool IsCommand { get; set; } = false;
+        public bool IsTemplate { get; set; }
         public bool ChangedObjectForm { get; set; } = false;
         public bool ChangeModuleForm { get; set; } = false;
         public bool ChangeObject { get; set; } = false;
@@ -38,23 +40,52 @@ namespace ComparisonAssistant.Models
 
         private void ParseFileParts()
         {
+            bool isSubsystems = false;
+            string treeSubsystem = string.Empty;
+
+            string formName = string.Empty;
+            string commandName = string.Empty;
+            string templateName = string.Empty;
+
+            string previousPart = string.Empty;
+            string part = string.Empty;
+
             for (int i = FileParts.MaxIndex; i >= 0; --i)
             {
-                string part = FileParts[i];
+                if (IsForm && string.IsNullOrEmpty(formName))
+                    formName = previousPart.RemoveEndText(".xml");
+                if (IsCommand && string.IsNullOrEmpty(commandName))
+                    commandName = previousPart.RemoveEndText(".xml");
 
-                if (part == "Module.bsl" || part == "ObjectModule.bsl")
+                previousPart = part;
+                part = FileParts[i];
+
+                if (part == "Module.bsl" || part == "ObjectModule.bsl" || part == "RecordSetModule.bsl")
                     IsModule = true;
-                if (part == "ManagerModule.bsl")
+                else if (part == "ManagerModule.bsl")
                     IsModuleManager = true;
-                if (part == "Forms")
+                else if (part == "Forms")
                     IsForm = true;
+                else if (part == "Commands")
+                    IsCommand = true;
+                else if (part == "Subsystems")
+                {
+                    isSubsystems = true;
+                    if (!string.IsNullOrEmpty(previousPart))
+                        treeSubsystem = previousPart.RemoveEndText(".xml") + 
+                            (string.IsNullOrEmpty(treeSubsystem) ? "" : $".{treeSubsystem}");
+                }
+                else if (part == "Templates")
+                {
+                    IsTemplate = true;
+                    templateName = previousPart.RemoveEndText(".xml");
+                }
 
                 if (StaticSettings.DictionaryTranslate.ContainsKey(part))
                 {
                     TypeObjectName = StaticSettings.DictionaryTranslate[part];
-                    ObjectName = FileParts[i + 1];
+                    ObjectName = previousPart;
                 }
-
             }
 
             if (!IsModule && !IsModuleManager && !IsForm)
@@ -74,7 +105,28 @@ namespace ComparisonAssistant.Models
 
             Name = TypeObjectName;
             if (!string.IsNullOrWhiteSpace(ObjectName))
-                Name += "." + ObjectName;
+            {
+                if (isSubsystems)
+                {
+                    Name += $".{treeSubsystem}";
+                }
+                else
+                {
+                    Name += $".{ObjectName}";
+
+                    if (IsForm && !string.IsNullOrEmpty(formName))
+                        Name += $".Форма.{formName}";
+                    if (IsCommand && !string.IsNullOrEmpty(commandName))
+                        Name += $".Команды.{commandName}";
+                    if (IsTemplate && !string.IsNullOrEmpty(templateName))
+                        Name += $".Макет.{templateName}";
+
+                    if (IsModule)
+                        Name += ".Модуль";
+                    if (IsModuleManager)
+                        Name += ".МодульМенеджера";
+                }
+            }
 
         }
     }
