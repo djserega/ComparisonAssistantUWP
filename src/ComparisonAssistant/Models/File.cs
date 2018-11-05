@@ -102,6 +102,11 @@ namespace ComparisonAssistant.Models
                 TypeObjectName = "Конфигурация";
                 ObjectName = "Поддержка";
             }
+            else if (FullName == "Ext/ManagedApplicationModule.bsl")
+            {
+                TypeObjectName = "Конфигурация";
+                ObjectName = "Модуль управляемого приложения";
+            }
 
             Name = TypeObjectName;
             if (!string.IsNullOrWhiteSpace(ObjectName))
